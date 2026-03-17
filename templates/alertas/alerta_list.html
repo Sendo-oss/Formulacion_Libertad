@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Alertas</h1>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-danger" href="?prioridad={{ request.GET.prioridad|default:'' }}&estado={{ request.GET.estado|default:'' }}&export=pdf">Exportar PDF</a>
+        <a class="btn btn-outline-success" href="?prioridad={{ request.GET.prioridad|default:'' }}&estado={{ request.GET.estado|default:'' }}&export=excel">Exportar Excel</a>
+    </div>
+</div>
+
+<form class="panel-card card card-body mb-3" method="get">
+    <div class="row g-2">
+        <div class="col-md-5">
+            <select class="form-select" name="prioridad">
+                <option value="">Todas las prioridades</option>
+                {% for value, label in prioridades %}
+                    <option value="{{ value }}" {% if request.GET.prioridad == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-5">
+            <select class="form-select" name="estado">
+                <option value="">Todos los estados</option>
+                {% for value, label in estados %}
+                    <option value="{{ value }}" {% if request.GET.estado == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+        </div>
+    </div>
+</form>
+
+<div class="panel-card card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Materia prima</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alerta in alertas %}
+                    <tr>
+                        <td>{{ alerta.get_tipo_alerta_display }}</td>
+                        <td>{{ alerta.materia_prima.nombre }}</td>
+                        <td>
+                            <span class="badge {% if alerta.prioridad == 'CRITICA' %}text-bg-danger{% elif alerta.prioridad == 'ALTA' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
+                                {{ alerta.get_prioridad_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge {% if alerta.estado == 'ACTIVA' %}text-bg-primary{% elif alerta.estado == 'REVISADA' %}text-bg-secondary{% else %}text-bg-dark{% endif %}">
+                                {{ alerta.get_estado_display }}
+                            </span>
+                        </td>
+                        <td>{{ alerta.fecha_generacion }}</td>
+                        <td><a href="{% url 'alertas:detalle' alerta.pk %}">Ver detalle</a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6">No hay alertas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

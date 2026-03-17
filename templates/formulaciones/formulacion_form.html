@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">{% if object %}Editar formulacion{% else %}Nueva formulacion{% endif %}</h1>
+    <a href="{% url 'formulaciones:lista' %}">Volver al listado</a>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <div class="panel-card card mb-4">
+        <div class="card-body p-4">
+            <h2 class="h5 mb-3">Informacion general</h2>
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% if formset.non_form_errors %}
+                <div class="alert alert-danger">{{ formset.non_form_errors }}</div>
+            {% endif %}
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label" for="{{ form.codigo.id_for_label }}">Codigo</label>
+                    {{ form.codigo }}
+                    <div class="form-text">{{ form.codigo.help_text }}</div>
+                    <div class="text-danger small">{{ form.codigo.errors }}</div>
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label" for="{{ form.nombre.id_for_label }}">Nombre</label>
+                    {{ form.nombre }}
+                    <div class="text-danger small">{{ form.nombre.errors }}</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="{{ form.categoria.id_for_label }}">Categoria</label>
+                    {{ form.categoria }}
+                    <div class="text-danger small">{{ form.categoria.errors }}</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="{{ form.tipo_formulacion.id_for_label }}">Tipo</label>
+                    {{ form.tipo_formulacion }}
+                    <div class="text-danger small">{{ form.tipo_formulacion.errors }}</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="{{ form.origen.id_for_label }}">Origen</label>
+                    {{ form.origen }}
+                    <div class="text-danger small">{{ form.origen.errors }}</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.estado.id_for_label }}">Estado</label>
+                    {{ form.estado }}
+                    <div class="text-danger small">{{ form.estado.errors }}</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.fuente_referencia.id_for_label }}">Fuente de referencia</label>
+                    {{ form.fuente_referencia }}
+                    <div class="form-text">{{ form.fuente_referencia.help_text }}</div>
+                    <div class="text-danger small">{{ form.fuente_referencia.errors }}</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="{{ form.descripcion.id_for_label }}">Descripcion</label>
+                    {{ form.descripcion }}
+                    <div class="text-danger small">{{ form.descripcion.errors }}</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="{{ form.observaciones.id_for_label }}">Observaciones</label>
+                    {{ form.observaciones }}
+                    <div class="text-danger small">{{ form.observaciones.errors }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-card card mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Componentes de la formulacion</h2>
+                <button type="button" class="btn btn-outline-primary btn-sm" id="add-component">Agregar componente</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle" id="components-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">Orden</th>
+                            <th style="width: 42%">Materia prima</th>
+                            <th style="width: 20%">Cantidad</th>
+                            <th style="width: 18%">Unidad</th>
+                            <th style="width: 10%">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detalle_form in formset %}
+                            <tr class="component-row">
+                                <td>
+                                    {{ detalle_form.id }}
+                                    {{ detalle_form.orden }}
+                                    <div class="text-danger small">{{ detalle_form.orden.errors }}</div>
+                                </td>
+                                <td>
+                                    {{ detalle_form.materia_prima }}
+                                    <div class="text-danger small">{{ detalle_form.materia_prima.errors }}</div>
+                                </td>
+                                <td>
+                                    {{ detalle_form.cantidad }}
+                                    <div class="text-danger small">{{ detalle_form.cantidad.errors }}</div>
+                                </td>
+                                <td>
+                                    {{ detalle_form.unidad_medida }}
+                                    <div class="text-danger small">{{ detalle_form.unidad_medida.errors }}</div>
+                                </td>
+                                <td>
+                                    {% if detalle_form.DELETE %}
+                                        <div class="d-none">{{ detalle_form.DELETE }}</div>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-outline-danger btn-sm remove-component">Quitar</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <template id="empty-form-template">
+                <tr class="component-row">
+                    <td>
+                        {{ formset.empty_form.id }}
+                        {{ formset.empty_form.orden }}
+                    </td>
+                    <td>{{ formset.empty_form.materia_prima }}</td>
+                    <td>{{ formset.empty_form.cantidad }}</td>
+                    <td>{{ formset.empty_form.unidad_medida }}</td>
+                    <td>
+                        <div class="d-none">{{ formset.empty_form.DELETE }}</div>
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-component">Quitar</button>
+                    </td>
+                </tr>
+            </template>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button class="btn btn-primary" type="submit">{% if object %}Guardar cambios{% else %}Guardar formulacion{% endif %}</button>
+        {% if object %}
+            <a class="btn btn-outline-secondary" href="{% url 'formulaciones:detalle' object.pk %}">Cancelar</a>
+        {% endif %}
+    </div>
+</form>
+
+<script>
+    (function () {
+        const addButton = document.getElementById("add-component");
+        const totalForms = document.getElementById("id_detalles-TOTAL_FORMS");
+        const tableBody = document.querySelector("#components-table tbody");
+        const template = document.getElementById("empty-form-template").innerHTML;
+
+        function bindRemoveButtons(scope) {
+            scope.querySelectorAll(".remove-component").forEach((button) => {
+                if (button.dataset.bound === "true") return;
+                button.dataset.bound = "true";
+                button.addEventListener("click", function () {
+                    const row = this.closest("tr");
+                    const deleteInput = row.querySelector("input[type='checkbox'][name$='-DELETE']");
+                    if (deleteInput) {
+                        deleteInput.checked = true;
+                        row.style.display = "none";
+                    } else {
+                        row.remove();
+                        totalForms.value = document.querySelectorAll("#components-table tbody tr").length;
+                    }
+                });
+            });
+        }
+
+        addButton.addEventListener("click", function () {
+            const formIndex = Number(totalForms.value);
+            const newRowHtml = template.replaceAll("__prefix__", formIndex);
+            tableBody.insertAdjacentHTML("beforeend", newRowHtml);
+            totalForms.value = formIndex + 1;
+            bindRemoveButtons(tableBody);
+        });
+
+        bindRemoveButtons(document);
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-card card mb-4">
+    <div class="card-body p-4">
+        <span class="badge badge-soft rounded-pill mb-3">Calculo farmacéutico</span>
+        <h1 class="section-title mb-2">Calculadora de regla de tres y ajuste de formulaciones</h1>
+        <p class="text-secondary mb-0">
+            Usa esta pantalla para calcular dosis, volumen a administrar y ajuste de componentes a partir de formulaciones ya registradas.
+        </p>
+    </div>
+</div>
+
+<ul class="nav nav-pills mb-4">
+    <li class="nav-item"><a class="nav-link {% if active_tab == 'regla_tres' %}active{% endif %}" href="#regla-tres" data-bs-toggle="pill">Regla de tres</a></li>
+    <li class="nav-item"><a class="nav-link {% if active_tab == 'dosis_peso' %}active{% endif %}" href="#dosis-peso" data-bs-toggle="pill">Dosis por peso</a></li>
+    <li class="nav-item"><a class="nav-link {% if active_tab == 'escalado' %}active{% endif %}" href="#escalado" data-bs-toggle="pill">Ajuste de componentes</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade {% if active_tab == 'regla_tres' %}show active{% endif %}" id="regla-tres">
+        <div class="panel-card card">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Calculo directo por regla de tres</h2>
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="regla_tres">
+                    <div class="col-md-4">{{ regla_tres_form.dosis_requerida_mg.label_tag }}{{ regla_tres_form.dosis_requerida_mg }}</div>
+                    <div class="col-md-4">{{ regla_tres_form.concentracion_disponible_mg.label_tag }}{{ regla_tres_form.concentracion_disponible_mg }}</div>
+                    <div class="col-md-4">{{ regla_tres_form.volumen_disponible_ml.label_tag }}{{ regla_tres_form.volumen_disponible_ml }}</div>
+                    <div class="col-12"><button class="btn btn-primary" type="submit">Calcular volumen</button></div>
+                </form>
+                {% if resultado_regla_tres %}
+                    <div class="alert alert-info mt-4 mb-0">
+                        Debes administrar <strong>{{ resultado_regla_tres.ml_resultado }} ml</strong> para alcanzar una dosis de {{ resultado_regla_tres.dosis_mg }} mg.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade {% if active_tab == 'dosis_peso' %}show active{% endif %}" id="dosis-peso">
+        <div class="panel-card card">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Calculo de dosis por peso</h2>
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="dosis_peso">
+                    <div class="col-md-3">{{ dosis_peso_form.peso_kg.label_tag }}{{ dosis_peso_form.peso_kg }}</div>
+                    <div class="col-md-3">{{ dosis_peso_form.dosis_mg_kg.label_tag }}{{ dosis_peso_form.dosis_mg_kg }}</div>
+                    <div class="col-md-3">{{ dosis_peso_form.concentracion_disponible_mg.label_tag }}{{ dosis_peso_form.concentracion_disponible_mg }}</div>
+                    <div class="col-md-3">{{ dosis_peso_form.volumen_disponible_ml.label_tag }}{{ dosis_peso_form.volumen_disponible_ml }}</div>
+                    <div class="col-12"><button class="btn btn-primary" type="submit">Calcular dosis</button></div>
+                </form>
+                {% if resultado_dosis_peso %}
+                    <div class="alert alert-info mt-4 mb-0">
+                        La dosis total requerida es <strong>{{ resultado_dosis_peso.dosis_total }} mg</strong> y el volumen estimado a administrar es <strong>{{ resultado_dosis_peso.ml_resultado }} ml</strong>.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade {% if active_tab == 'escalado' %}show active{% endif %}" id="escalado">
+        <div class="panel-card card">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Ajuste de componentes de una formulacion</h2>
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="escalado">
+                    <div class="col-md-6">{{ escalado_form.formulacion.label_tag }}{{ escalado_form.formulacion }}</div>
+                    <div class="col-md-3">{{ escalado_form.cantidad_objetivo.label_tag }}{{ escalado_form.cantidad_objetivo }}</div>
+                    <div class="col-md-3">{{ escalado_form.unidad_objetivo.label_tag }}{{ escalado_form.unidad_objetivo }}</div>
+                    <div class="col-12"><button class="btn btn-primary" type="submit">Calcular componentes</button></div>
+                </form>
+                {% if resultado_escalado %}
+                    <div class="alert alert-info mt-4">
+                        Base registrada: {{ resultado_escalado.total_base }} unidades relativas. Se ajustaron componentes para una salida final de <strong>{{ resultado_escalado.cantidad_objetivo }} {{ resultado_escalado.unidad_objetivo }}</strong>.
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Orden</th>
+                                    <th>Materia prima</th>
+                                    <th>Base</th>
+                                    <th>Ajustado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in resultado_escalado.componentes %}
+                                    <tr>
+                                        <td>{{ item.orden }}</td>
+                                        <td>{{ item.materia_prima }}</td>
+                                        <td>{{ item.cantidad_base }} {{ item.unidad_base }}</td>
+                                        <td><strong>{{ item.cantidad_ajustada }} {{ item.unidad_resultado }}</strong></td>
+                                    </tr>
+                                {% empty %}
+                                    <tr><td colspan="4">La formulacion seleccionada no tiene componentes registrados.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
