@@ -8,9 +8,9 @@ Su finalidad es reducir errores manuales y facilitar operaciones matematicas fre
 
 ## Apartados del modulo
 
-### 1. Regla de tres
+### 1. Calculo de dosis por proporcionalidad
 
-La regla de tres es una herramienta matematica basica para calcular equivalencias entre una dosis requerida y una presentacion disponible.
+El calculo de dosis por proporcionalidad es una herramienta matematica aplicada para calcular equivalencias entre una dosis requerida y una presentacion disponible.
 
 Sirve para saber cuanto volumen se debe administrar cuando se conoce:
 
@@ -53,7 +53,7 @@ Primero calcula:
 
 `peso x dosis por kg = dosis total`
 
-Despues aplica una regla de tres usando la concentracion disponible para obtener el volumen a administrar.
+Despues aplica un calculo de proporcionalidad usando la concentracion disponible para obtener el volumen a administrar.
 
 #### Utilidad
 

@@ -4,7 +4,7 @@
 <div class="hero-card card mb-4">
     <div class="card-body p-4">
         <span class="badge badge-soft rounded-pill mb-3">Calculo farmacéutico</span>
-        <h1 class="section-title mb-2">Calculadora de regla de tres y ajuste de formulaciones</h1>
+        <h1 class="section-title mb-2">Calculadora de dosis por proporcionalidad y ajuste de formulaciones</h1>
         <p class="text-secondary mb-0">
             Usa esta pantalla para calcular dosis, volumen a administrar y ajuste de componentes a partir de formulaciones ya registradas.
         </p>
@@ -12,7 +12,7 @@
 </div>
 
 <ul class="nav nav-pills mb-4">
-    <li class="nav-item"><a class="nav-link {% if active_tab == 'regla_tres' %}active{% endif %}" href="#regla-tres" data-bs-toggle="pill">Regla de tres</a></li>
+    <li class="nav-item"><a class="nav-link {% if active_tab == 'regla_tres' %}active{% endif %}" href="#regla-tres" data-bs-toggle="pill">Calculo de dosis por proporcionalidad</a></li>
     <li class="nav-item"><a class="nav-link {% if active_tab == 'dosis_peso' %}active{% endif %}" href="#dosis-peso" data-bs-toggle="pill">Dosis por peso</a></li>
     <li class="nav-item"><a class="nav-link {% if active_tab == 'escalado' %}active{% endif %}" href="#escalado" data-bs-toggle="pill">Ajuste de componentes</a></li>
 </ul>
@@ -21,7 +21,7 @@
     <div class="tab-pane fade {% if active_tab == 'regla_tres' %}show active{% endif %}" id="regla-tres">
         <div class="panel-card card">
             <div class="card-body p-4">
-                <h2 class="h5 mb-3">Calculo directo por regla de tres</h2>
+                <h2 class="h5 mb-3">Calculo de dosis por proporcionalidad</h2>
                 <form method="post" class="row g-3">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="regla_tres">

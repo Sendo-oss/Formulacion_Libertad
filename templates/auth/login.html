@@ -1,35 +1,207 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Ingreso{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center align-items-center" style="min-height: 72vh;">
-    <div class="col-lg-5 mb-4 mb-lg-0">
-        <div class="pe-lg-5">
-            <span class="badge badge-soft rounded-pill mb-3">Campus institucional</span>
-            <h1 class="section-title display-6 mb-3">Acceso al sistema del laboratorio</h1>
-            <p class="text-secondary fs-5">
-                Gestiona materias primas, formulaciones magistrales, alertas y calculos farmacéuticos desde una plataforma con identidad institucional.
-            </p>
+<style>
+    @keyframes loginRise {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .login-side {
+        background:
+            radial-gradient(circle at top right, rgba(217, 177, 95, 0.2), transparent 28%),
+            linear-gradient(180deg, rgba(248, 251, 253, 0.98), rgba(239, 246, 250, 0.96));
+    }
+    .login-shell {
+        position: relative;
+        padding: 2.2rem;
+        border-radius: 1.6rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.86));
+        box-shadow: 0 22px 50px rgba(12, 46, 68, 0.12);
+        overflow: hidden;
+        animation: loginRise 0.55s ease-out;
+    }
+    .login-shell::before {
+        content: "";
+        position: absolute;
+        inset: auto -40px -50px auto;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(217, 177, 95, 0.18), transparent 68%);
+    }
+    .login-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(217, 177, 95, 0.14);
+        color: var(--brand-dark);
+        font-weight: 700;
+    }
+    .login-kicker::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 6px rgba(217, 177, 95, 0.18);
+    }
+    .login-note {
+        padding: 1rem 1.1rem;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(14, 58, 90, 0.08), rgba(22, 77, 118, 0.04));
+        border: 1px solid rgba(14, 58, 90, 0.08);
+    }
+    .login-note strong {
+        display: block;
+        color: var(--brand-dark);
+        margin-bottom: 0.35rem;
+    }
+    .login-brand-mini {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 1.35rem;
+    }
+    .login-brand-mini img {
+        width: 68px;
+        height: auto;
+        padding: 0.35rem 0.55rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 10px 22px rgba(12, 46, 68, 0.08);
+    }
+    .login-brand-mini span {
+        display: block;
+        line-height: 1.05;
+        color: var(--brand-dark);
+    }
+    .login-brand-mini strong {
+        display: block;
+        font-size: 1.05rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .login-brand-mini small {
+        display: block;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5f7686;
+    }
+    .input-shell {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        width: 100%;
+        min-height: 58px;
+        padding: 0 1.15rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(14, 58, 90, 0.1);
+        box-shadow: 0 12px 26px rgba(11, 45, 67, 0.05);
+    }
+    .input-shell:focus-within {
+        border-color: rgba(14, 58, 90, 0.32);
+        box-shadow: 0 0 0 0.25rem rgba(14, 58, 90, 0.1);
+    }
+    .input-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--brand);
+        flex: 0 0 auto;
+    }
+    .input-shell input {
+        width: 100%;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        min-height: auto !important;
+        padding: 0 !important;
+    }
+    .login-submit {
+        min-height: 54px;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+    }
+    .login-visual {
+        min-height: 700px;
+        background:
+            linear-gradient(180deg, rgba(8, 39, 57, 0.24), rgba(8, 39, 57, 0.52)),
+            url('{% static "img/Libertad.png" %}') 28% center / cover no-repeat;
+    }
+</style>
+<div class="panel-card card overflow-hidden" style="min-height: 72vh;">
+    <div class="row g-0 h-100">
+        <div class="col-lg-8 d-none d-lg-block">
+            <div class="h-100 position-relative login-visual">
+                <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex flex-column justify-content-end p-5 text-white">
+                    <span class="badge rounded-pill align-self-start mb-3" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.22);">Laboratorio academico</span>
+                    <h1 class="display-6 fw-bold mb-3 text-white">Formulacion magistral con identidad institucional</h1>
+                    <p class="mb-0" style="max-width: 420px; color: rgba(255,255,255,0.9);">
+                        Plataforma para el control de materias primas, formulaciones, alertas y calculos farmaceuticos del Instituto Libertad.
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="panel-card card">
-            <div class="card-body p-4 p-lg-5">
-                <h2 class="h4 mb-1">Iniciar sesion</h2>
-                <p class="text-secondary mb-4">Ingresa con tu cuenta institucional.</p>
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label" for="{{ form.username.id_for_label }}">Usuario</label>
-                        {{ form.username }}
+        <div class="col-lg-4 d-flex align-items-center login-side">
+            <div class="w-100 p-4 p-md-5 p-xl-6">
+                <div class="mx-auto login-shell" style="max-width: 560px;">
+                    <div class="position-relative">
+                        <div class="login-brand-mini">
+                            <img src="{% static 'img/logo-istul.png' %}" alt="ISTUL">
+                            <span>
+                                <small>Instituto universitario</small>
+                                <strong>Libertad</strong>
+                            </span>
+                        </div>
+                        <span class="login-kicker mb-3">Acceso institucional</span>
+                        <h2 class="section-title display-6 mb-2">Acceso al sistema</h2>
+                        <p class="text-secondary fs-5 mb-4">
+                            Ingresa con tu cuenta para continuar con la gestion del laboratorio.
+                        </p>
+                        <div class="login-note mb-4">
+                            <strong>Entorno seguro</strong>
+                            Solo personal autorizado puede registrar formulaciones, revisar alertas y trabajar con calculos farmaceuticos.
+                        </div>
+                        <form method="post" autocomplete="off">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold" for="{{ form.username.id_for_label }}">Usuario</label>
+                                <div class="input-shell">
+                                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.33 0-6 1.79-6 4v1h12v-1c0-2.21-2.67-4-6-4Z" fill="currentColor"/>
+                                    </svg>
+                                    {{ form.username }}
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold" for="{{ form.password.id_for_label }}">Contrasena</label>
+                                <div class="input-shell">
+                                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M17 9h-1V7a4 4 0 1 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4Zm2 8a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 12 15.5Z" fill="currentColor"/>
+                                    </svg>
+                                    {{ form.password }}
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mb-4">
+                                <a href="{% url 'usuarios:recuperacion_solicitar' %}" class="text-decoration-none fw-semibold" style="color: var(--brand);">Olvide mi contrasena</a>
+                            </div>
+                            <button class="btn btn-primary w-100 login-submit" type="submit">Ingresar al sistema</button>
+                        </form>
                     </div>
-                    <div class="mb-4">
-                        <label class="form-label" for="{{ form.password.id_for_label }}">Contraseña</label>
-                        {{ form.password }}
-                    </div>
-                    <button class="btn btn-primary w-100" type="submit">Ingresar al sistema</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>

@@ -6,6 +6,7 @@ from datetime import timedelta
 from apps.alertas.models import Alerta
 from apps.formulaciones.models import Formulacion
 from apps.inventario.models import MateriaPrima
+from apps.usuarios.models import SolicitudRecuperacionContrasena, Usuario
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -23,4 +24,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ).count()
         context["materias_sin_stock"] = MateriaPrima.objects.filter(stock_actual=0).count()
         context["alertas_activas"] = Alerta.objects.filter(estado=Alerta.Estado.ACTIVA)[:10]
+        if self.request.user.rol == Usuario.Rol.ADMINISTRADOR:
+            context["solicitudes_recuperacion_pendientes"] = SolicitudRecuperacionContrasena.objects.filter(
+                estado=SolicitudRecuperacionContrasena.Estado.PENDIENTE
+            ).count()
+            context["usuarios_con_cambio_pendiente"] = Usuario.objects.filter(debe_cambiar_contrasena=True).count()
         return context

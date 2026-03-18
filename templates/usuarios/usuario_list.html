@@ -3,8 +3,23 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">Usuarios</h1>
-    <a class="btn btn-primary" href="{% url 'usuarios:crear' %}">Nuevo usuario</a>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'usuarios:recuperaciones' %}">
+            Solicitudes de recuperacion
+            {% if solicitudes_pendientes %}
+                <span class="badge text-bg-warning ms-1">{{ solicitudes_pendientes }}</span>
+            {% endif %}
+        </a>
+        <a class="btn btn-primary" href="{% url 'usuarios:crear' %}">Nuevo usuario</a>
+    </div>
 </div>
+
+{% if usuarios_con_cambio_pendiente %}
+    <div class="alert alert-warning d-flex justify-content-between align-items-center">
+        <span>Hay {{ usuarios_con_cambio_pendiente }} usuario{{ usuarios_con_cambio_pendiente|pluralize }} con contrasena temporal pendiente de cambio.</span>
+        <a class="btn btn-sm btn-outline-dark" href="{% url 'usuarios:recuperaciones' %}">Revisar recuperaciones</a>
+    </div>
+{% endif %}
 
 <div class="card shadow-sm">
     <div class="table-responsive">
@@ -16,6 +31,7 @@
                     <th>Correo</th>
                     <th>Rol</th>
                     <th>Estado</th>
+                    <th>Seguridad</th>
                     <th></th>
                 </tr>
             </thead>
@@ -27,10 +43,17 @@
                         <td>{{ usuario.email }}</td>
                         <td>{{ usuario.get_rol_display }}</td>
                         <td>{{ usuario.is_active|yesno:"Activo,Inactivo" }}</td>
+                        <td>
+                            {% if usuario.debe_cambiar_contrasena %}
+                                <span class="badge text-bg-warning">Cambio pendiente</span>
+                            {% else %}
+                                <span class="badge text-bg-success">Normal</span>
+                            {% endif %}
+                        </td>
                         <td><a href="{% url 'usuarios:editar' usuario.pk %}">Editar</a></td>
                     </tr>
                 {% empty %}
-                    <tr><td colspan="6">No hay usuarios registrados.</td></tr>
+                    <tr><td colspan="7">No hay usuarios registrados.</td></tr>
                 {% endfor %}
             </tbody>
         </table>

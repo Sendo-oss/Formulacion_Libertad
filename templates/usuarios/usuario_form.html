@@ -1,13 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card shadow-sm">
-    <div class="card-body">
-        <h1 class="h3">{% if object %}Editar usuario{% else %}Nuevo usuario{% endif %}</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">{% if object %}Editar usuario{% else %}Nuevo usuario{% endif %}</h1>
+    <a href="{% url 'usuarios:lista' %}">Volver al listado</a>
+</div>
+
+<div class="panel-card card">
+    <div class="card-body p-4 p-lg-5">
+        <div class="mb-4">
+            <span class="badge badge-soft rounded-pill mb-3">Gestion institucional</span>
+            <p class="text-secondary mb-0">Crea o actualiza cuentas para administrar permisos y acceso al sistema.</p>
+        </div>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-primary" type="submit">Guardar</button>
+            <div class="row g-3">
+                {% for field in form %}
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary px-4" type="submit">Guardar</button>
+                <a class="btn btn-outline-secondary" href="{% url 'usuarios:lista' %}">Cancelar</a>
+            </div>
         </form>
     </div>
 </div>

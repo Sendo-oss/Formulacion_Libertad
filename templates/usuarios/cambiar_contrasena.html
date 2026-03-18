@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Cambio obligatorio de contrasena{% endblock %}
+
+{% block content %}
+<div class="panel-card card mx-auto" style="max-width: 760px;">
+    <div class="card-body p-4 p-lg-5">
+        <span class="badge badge-soft rounded-pill mb-3">Seguridad de acceso</span>
+        <h1 class="section-title mb-2">Debes cambiar tu contrasena temporal</h1>
+        <p class="text-secondary mb-4">
+            El administrador restablecio tu acceso con una contrasena temporal. Antes de continuar, crea una nueva contrasena personal y segura.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="mb-4">
+                <label class="form-label fw-semibold" for="{{ form.old_password.id_for_label }}">Contrasena temporal actual</label>
+                {{ form.old_password }}
+                {% if form.old_password.errors %}
+                    <div class="text-danger small mt-1">{{ form.old_password.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-semibold" for="{{ form.new_password1.id_for_label }}">Nueva contrasena</label>
+                {{ form.new_password1 }}
+                {% if form.new_password1.help_text %}
+                    <div class="form-text">{{ form.new_password1.help_text|safe }}</div>
+                {% endif %}
+                {% if form.new_password1.errors %}
+                    <div class="text-danger small mt-1">{{ form.new_password1.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-semibold" for="{{ form.new_password2.id_for_label }}">Confirmar nueva contrasena</label>
+                {{ form.new_password2 }}
+                {% if form.new_password2.errors %}
+                    <div class="text-danger small mt-1">{{ form.new_password2.errors }}</div>
+                {% endif %}
+            </div>
+            <button class="btn btn-primary px-4" type="submit">Guardar nueva contrasena</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

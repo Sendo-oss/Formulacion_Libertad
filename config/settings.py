@@ -38,6 +38,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.usuarios.middleware.ForzarCambioContrasenaMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -74,6 +75,7 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = "usuarios.Usuario"
+LOGIN_URL = "/login/"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -98,3 +100,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "dashboard:inicio"
 LOGOUT_REDIRECT_URL = "login"
+
+EMAIL_BACKEND = get_env("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = get_env("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(get_env("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = get_env("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = get_env("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = get_env("EMAIL_USE_TLS", "True").lower() == "true"
+EMAIL_USE_SSL = get_env("EMAIL_USE_SSL", "False").lower() == "true"
+DEFAULT_FROM_EMAIL = get_env("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "no-reply@itslibertad.edu.ec")

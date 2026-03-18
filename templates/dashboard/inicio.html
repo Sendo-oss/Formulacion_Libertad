@@ -21,79 +21,153 @@
 
 <div class="row g-3 mb-4">
     <div class="col-md-6 col-xl-3">
-        <div class="panel-card card h-100">
-            <div class="card-body">
-                <h2 class="h5">Materias primas</h2>
-                <p class="metric-value">{{ total_materias_primas }}</p>
+        <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(245,249,252,0.92));">
+            <div class="card-body p-4">
+                <span class="badge badge-soft rounded-pill mb-3">Inventario</span>
+                <h2 class="h6 text-uppercase text-secondary">Materias primas</h2>
+                <p class="metric-value mb-1">{{ total_materias_primas }}</p>
+                <p class="text-secondary mb-0">Registros disponibles en el laboratorio.</p>
             </div>
         </div>
     </div>
     <div class="col-md-6 col-xl-3">
-        <div class="panel-card card h-100">
-            <div class="card-body">
-                <h2 class="h5">Formulaciones</h2>
-                <p class="metric-value">{{ total_formulaciones }}</p>
+        <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(244,248,251,0.92));">
+            <div class="card-body p-4">
+                <span class="badge badge-soft rounded-pill mb-3">Produccion</span>
+                <h2 class="h6 text-uppercase text-secondary">Formulaciones</h2>
+                <p class="metric-value mb-1">{{ total_formulaciones }}</p>
+                <p class="text-secondary mb-0">Catalogo tecnico y academico registrado.</p>
             </div>
         </div>
     </div>
     <div class="col-md-6 col-xl-3">
-        <div class="panel-card card h-100">
-            <div class="card-body">
-                <h2 class="h5">Por vencer</h2>
-                <p class="metric-value">{{ materias_por_vencer }}</p>
+        <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(255,251,242,0.96), rgba(255,247,228,0.92));">
+            <div class="card-body p-4">
+                <span class="badge rounded-pill mb-3" style="background: rgba(217, 177, 95, 0.18); color: #7b5a1c;">Vigilancia</span>
+                <h2 class="h6 text-uppercase text-secondary">Por vencer</h2>
+                <p class="metric-value mb-1">{{ materias_por_vencer }}</p>
+                <p class="text-secondary mb-0">Materias primas con caducidad proxima.</p>
             </div>
         </div>
     </div>
     <div class="col-md-6 col-xl-3">
-        <div class="panel-card card h-100">
-            <div class="card-body">
-                <h2 class="h5">Sin stock</h2>
-                <p class="metric-value">{{ materias_sin_stock }}</p>
+        <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(255,246,246,0.96), rgba(255,238,238,0.92));">
+            <div class="card-body p-4">
+                <span class="badge rounded-pill mb-3" style="background: rgba(187, 67, 67, 0.14); color: #8a2323;">Prioridad</span>
+                <h2 class="h6 text-uppercase text-secondary">Sin stock</h2>
+                <p class="metric-value mb-1">{{ materias_sin_stock }}</p>
+                <p class="text-secondary mb-0">Registros que requieren reposicion inmediata.</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="panel-card card">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h5 mb-0">Alertas activas</h2>
-            <a href="{% url 'alertas:lista' %}">Ver todas</a>
+{% if request.user.rol == "ADMINISTRADOR" %}
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(255,251,242,0.96), rgba(255,247,228,0.92));">
+            <div class="card-body p-4">
+                <span class="badge rounded-pill mb-3" style="background: rgba(217, 177, 95, 0.18); color: #7b5a1c;">Acceso</span>
+                <h2 class="h6 text-uppercase text-secondary">Solicitudes pendientes</h2>
+                <p class="metric-value mb-1">{{ solicitudes_recuperacion_pendientes }}</p>
+                <p class="text-secondary mb-3">Solicitudes de recuperacion de contrasena por revisar.</p>
+                <a class="btn btn-outline-primary" href="{% url 'usuarios:recuperaciones' %}">Gestionar solicitudes</a>
+            </div>
         </div>
-        {% if alertas_activas %}
-            <ul class="list-group">
-                {% for alerta in alertas_activas %}
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <strong>{{ alerta.get_tipo_alerta_display }}</strong> - {{ alerta.materia_prima.nombre }}
-                                <div class="text-muted small">{{ alerta.mensaje }}</div>
-                            </div>
-                            <span class="badge {% if alerta.prioridad == 'CRITICA' %}text-bg-danger{% elif alerta.prioridad == 'ALTA' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
-                                {{ alerta.get_prioridad_display }}
-                            </span>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="mb-0">No hay alertas activas registradas.</p>
-        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(245,249,252,0.96), rgba(238,245,250,0.92));">
+            <div class="card-body p-4">
+                <span class="badge badge-soft rounded-pill mb-3">Seguimiento</span>
+                <h2 class="h6 text-uppercase text-secondary">Usuarios con cambio pendiente</h2>
+                <p class="metric-value mb-1">{{ usuarios_con_cambio_pendiente }}</p>
+                <p class="text-secondary mb-3">Usuarios que ya recibieron contrasena temporal y aun no la actualizan.</p>
+                <a class="btn btn-outline-primary" href="{% url 'usuarios:lista' %}">Ver usuarios</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row g-4">
+    <div class="col-xl-7">
+        <div class="panel-card card h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <span class="badge badge-soft rounded-pill mb-2">Control operativo</span>
+                        <h2 class="h5 mb-0">Alertas activas</h2>
+                    </div>
+                    <a href="{% url 'alertas:lista' %}">Ver todas</a>
+                </div>
+                {% if alertas_activas %}
+                    <ul class="list-group list-group-flush">
+                        {% for alerta in alertas_activas %}
+                            <li class="list-group-item px-0 py-3 bg-transparent">
+                                <div class="d-flex justify-content-between align-items-start gap-3">
+                                    <div>
+                                        <strong>{{ alerta.get_tipo_alerta_display }}</strong>
+                                        <div class="text-secondary mt-1">{{ alerta.materia_prima.nombre }}</div>
+                                        <div class="text-muted small mt-1">{{ alerta.mensaje }}</div>
+                                    </div>
+                                    <span class="badge {% if alerta.prioridad == 'CRITICA' %}text-bg-danger{% elif alerta.prioridad == 'ALTA' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
+                                        {{ alerta.get_prioridad_display }}
+                                    </span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="mb-0">No hay alertas activas registradas.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(10,49,73,0.96), rgba(14,58,90,0.96));">
+            <div class="card-body p-4 text-white">
+                <span class="badge rounded-pill mb-3" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.14);">Accesos rapidos</span>
+                <h2 class="h4 mb-3">Acciones recomendadas</h2>
+                <p class="text-white-50 mb-4">
+                    Usa estos accesos para navegar rapidamente entre los procesos mas frecuentes del laboratorio.
+                </p>
+                <div class="d-grid gap-3">
+                    <a class="btn btn-light text-start py-3" href="{% url 'inventario:lista' %}">Consultar inventario</a>
+                    <a class="btn btn-light text-start py-3" href="{% url 'formulaciones:lista' %}">Consultar formulaciones</a>
+                    <a class="btn btn-light text-start py-3" href="{% url 'alertas:lista' %}">Gestionar alertas</a>
+                    <a class="btn btn-outline-light text-start py-3" href="{% url 'calculadora:inicio' %}">Abrir calculadora</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="panel-card card mt-4">
-    <div class="card-body">
-        <h2 class="h5 mb-3">Accesos rapidos</h2>
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <span class="badge badge-soft rounded-pill mb-2">Resumen</span>
+                <h2 class="h5 mb-0">Vision general del sistema</h2>
+            </div>
+        </div>
         <div class="row g-3">
             <div class="col-md-4">
-                <a class="btn btn-outline-primary w-100" href="{% url 'inventario:lista' %}">Consultar inventario</a>
+                <div class="rounded-4 p-4 h-100" style="background: rgba(14, 58, 90, 0.05);">
+                    <h3 class="h6 text-uppercase text-secondary">Inventario</h3>
+                    <p class="mb-0 text-secondary">Controla materias primas, vencimientos, lotes y disponibilidad de insumos.</p>
+                </div>
             </div>
             <div class="col-md-4">
-                <a class="btn btn-outline-primary w-100" href="{% url 'formulaciones:lista' %}">Consultar formulaciones</a>
+                <div class="rounded-4 p-4 h-100" style="background: rgba(217, 177, 95, 0.09);">
+                    <h3 class="h6 text-uppercase text-secondary">Produccion</h3>
+                    <p class="mb-0 text-secondary">Administra formulaciones, componentes y escalado tecnico de preparaciones.</p>
+                </div>
             </div>
             <div class="col-md-4">
-                <a class="btn btn-outline-primary w-100" href="{% url 'alertas:lista' %}">Gestionar alertas</a>
+                <div class="rounded-4 p-4 h-100" style="background: rgba(11, 45, 67, 0.05);">
+                    <h3 class="h6 text-uppercase text-secondary">Seguimiento</h3>
+                    <p class="mb-0 text-secondary">Monitorea alertas operativas y apoya el calculo academico con herramientas integradas.</p>
+                </div>
             </div>
         </div>
     </div>

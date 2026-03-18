@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitudes de recuperacion{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h3 mb-1">Solicitudes de recuperacion</h1>
+        <p class="text-secondary mb-0">Aqui el administrador revisa, atiende o rechaza las solicitudes de cambio de contrasena.</p>
+    </div>
+    <a class="btn btn-outline-primary" href="{% url 'usuarios:lista' %}">Volver a usuarios</a>
+</div>
+
+<div class="panel-card card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>Correo</th>
+                    <th>Usuario relacionado</th>
+                    <th>Estado</th>
+                    <th>Fecha solicitud</th>
+                    <th>Atendida por</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes %}
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">{{ solicitud.correo }}</div>
+                            {% if solicitud.observaciones %}
+                                <div class="text-secondary small">{{ solicitud.observaciones|truncatechars:80 }}</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if solicitud.usuario %}
+                                {{ solicitud.usuario.get_full_name|default:solicitud.usuario.username }}
+                            {% else %}
+                                <span class="text-secondary">Sin coincidencia automatica</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if solicitud.estado == "PENDIENTE" %}
+                                <span class="badge text-bg-warning">Pendiente</span>
+                            {% elif solicitud.estado == "ATENDIDA" %}
+                                <span class="badge text-bg-success">Atendida</span>
+                            {% else %}
+                                <span class="badge text-bg-secondary">Rechazada</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ solicitud.fecha_solicitud|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            {% if solicitud.atendida_por %}
+                                {{ solicitud.atendida_por.get_full_name|default:solicitud.atendida_por.username }}
+                            {% else %}
+                                <span class="text-secondary">Sin gestionar</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-sm btn-outline-primary" href="{% url 'usuarios:recuperacion_gestionar' solicitud.pk %}">Gestionar</a>
+                                <form method="post" action="{% url 'usuarios:recuperacion_eliminar' solicitud.pk %}" onsubmit="return confirm('Se eliminara esta solicitud. Deseas continuar?');">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-secondary">No hay solicitudes registradas.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
