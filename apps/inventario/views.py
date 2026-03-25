@@ -12,12 +12,27 @@ from .forms import MateriaPrimaForm
 from .models import MateriaPrima
 
 
+def puede_editar_materia(user, materia_prima=None):
+    if not user.is_authenticated:
+        return False
+    if user.rol == Usuario.Rol.ADMINISTRADOR:
+        return True
+    if user.rol != Usuario.Rol.PROFESOR:
+        return False
+    if materia_prima is None:
+        return True
+    return materia_prima.registrado_por_id == user.id
+
+
 class PuedeEditarInventarioMixin(UserPassesTestMixin):
     def test_func(self):
-        return (
-            self.request.user.is_authenticated
-            and self.request.user.rol in {Usuario.Rol.ADMINISTRADOR, Usuario.Rol.PROFESOR}
-        )
+        materia_prima = None
+        if hasattr(self, "get_object"):
+            try:
+                materia_prima = self.get_object()
+            except Exception:
+                materia_prima = None
+        return puede_editar_materia(self.request.user, materia_prima)
 
 
 class MateriaPrimaListView(LoginRequiredMixin, ListView):
@@ -122,6 +137,11 @@ class MateriaPrimaDetailView(LoginRequiredMixin, DetailView):
     model = MateriaPrima
     template_name = "inventario/materiaprima_detail.html"
     context_object_name = "materia_prima"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["puede_editar"] = puede_editar_materia(self.request.user, self.object)
+        return context
 
     def render_to_response(self, context, **response_kwargs):
         materia = self.get_object()

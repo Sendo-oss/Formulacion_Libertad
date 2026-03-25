@@ -10,6 +10,12 @@ from apps.inventario.data import MATERIAS_PRIMAS_BASE
 from apps.inventario.models import MateriaPrima
 from apps.usuarios.models import Usuario
 
+CATALOGO_CATEGORIAS = {
+    "EXCIPIENTE": "Excipiente",
+    "MAGISTRAL_TIPIFICADA": "Formula magistral tipificada",
+    "PREPARADO_OFICIAL": "Preparado oficial",
+}
+
 
 def parse_date(value):
     if not value:
@@ -74,7 +80,7 @@ class Command(BaseCommand):
                 defaults={
                     "nombre": item["nombre"],
                     "descripcion": item["descripcion"],
-                    "categoria": item["categoria"],
+                    "categoria": CATALOGO_CATEGORIAS.get(item["categoria"], item["categoria"]),
                     "tipo_formulacion": item["tipo_formulacion"],
                     "origen": item["origen"],
                     "fuente_referencia": item["fuente_referencia"],

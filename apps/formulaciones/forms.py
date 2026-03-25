@@ -6,11 +6,59 @@ from .models import Formulacion, FormulacionDetalle
 
 
 class FormulacionForm(forms.ModelForm):
+    categoria = forms.ChoiceField(label="Categoria", required=False)
+    nueva_categoria = forms.CharField(
+        label="Nueva categoria",
+        required=False,
+        help_text="Si no aparece en la lista, escribela aqui para agregarla.",
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        categorias_existentes = list(
+            Formulacion.objects.exclude(categoria__exact="")
+            .order_by("categoria")
+            .values_list("categoria", flat=True)
+            .distinct()
+        )
+        categorias = list(Formulacion.CATEGORIAS_BASE)
+        for categoria in categorias_existentes:
+            if categoria not in categorias:
+                categorias.append(categoria)
+        if self.instance and self.instance.pk and self.instance.categoria and self.instance.categoria not in categorias:
+            categorias.append(self.instance.categoria)
+        self.fields["categoria"].choices = [("", "Selecciona una categoria")] + [
+            (categoria, categoria) for categoria in categorias
+        ]
+        if self.instance and self.instance.pk:
+            self.fields["categoria"].initial = self.instance.categoria
         for field in self.fields.values():
             css_class = "form-select" if isinstance(field.widget, forms.Select) else "form-control"
             field.widget.attrs.setdefault("class", css_class)
+        self.fields["fuente_referencia"].widget.attrs.setdefault(
+            "placeholder",
+            "Ejemplo: https://... o autor, A. A. (2023). Titulo del libro. Editorial.",
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        categoria = (cleaned_data.get("categoria") or "").strip()
+        nueva_categoria = (cleaned_data.get("nueva_categoria") or "").strip()
+        categorias_existentes = {
+            item.lower(): item
+            for item in Formulacion.objects.exclude(categoria__exact="")
+            .values_list("categoria", flat=True)
+            .distinct()
+        }
+
+        if nueva_categoria:
+            cleaned_data["categoria"] = categorias_existentes.get(nueva_categoria.lower(), nueva_categoria)
+        elif categoria:
+            cleaned_data["categoria"] = categoria
+        else:
+            self.add_error("categoria", "Debes seleccionar una categoria o registrar una nueva.")
+
+        return cleaned_data
 
     class Meta:
         model = Formulacion
@@ -21,7 +69,7 @@ class FormulacionForm(forms.ModelForm):
         }
         help_texts = {
             "codigo": "Usa el codigo institucional o uno interno unico.",
-            "fuente_referencia": "Ejemplo: Formulario Nacional 2003 o referencia docente.",
+            "fuente_referencia": "Ingresa la fuente de donde se obtuvo la formulacion. Puede ser enlace web, libro, articulo o documento tecnico. En tu documento Word cita esta fuente en formato APA 7.",
         }
 
 
@@ -62,7 +110,10 @@ FormulacionDetalleFormSet = inlineformset_factory(
     widgets={
         "materia_prima": forms.Select(attrs={"class": "form-select"}),
         "cantidad": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
-        "unidad_medida": forms.TextInput(attrs={"class": "form-control"}),
+        "unidad_medida": forms.Select(
+            attrs={"class": "form-select"},
+            choices=FormulacionDetalle.UnidadMedida.choices,
+        ),
         "orden": forms.NumberInput(attrs={"class": "form-control", "min": "1"}),
     },
 )

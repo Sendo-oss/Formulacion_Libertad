@@ -5,7 +5,7 @@
     <h1 class="h3 mb-0">{{ materia_prima.nombre }}</h1>
     <div class="d-flex gap-2">
         <a class="btn btn-outline-danger btn-sm" href="?export=pdf">Descargar PDF</a>
-        {% if request.user.rol != "ESTUDIANTE" %}
+        {% if puede_editar %}
             <a class="btn btn-outline-primary btn-sm" href="{% url 'inventario:editar' materia_prima.pk %}">Editar</a>
         {% endif %}
     </div>

@@ -15,12 +15,27 @@ from .forms import FormulacionDetalleFormSet, FormulacionForm
 from .models import Formulacion
 
 
+def puede_editar_formulacion(user, formulacion=None):
+    if not user.is_authenticated:
+        return False
+    if user.rol == Usuario.Rol.ADMINISTRADOR:
+        return True
+    if user.rol != Usuario.Rol.PROFESOR:
+        return False
+    if formulacion is None:
+        return True
+    return formulacion.creado_por_id == user.id
+
+
 class PuedeEditarFormulacionMixin(UserPassesTestMixin):
     def test_func(self):
-        return (
-            self.request.user.is_authenticated
-            and self.request.user.rol in {Usuario.Rol.ADMINISTRADOR, Usuario.Rol.PROFESOR}
-        )
+        formulacion = None
+        if hasattr(self, "get_object"):
+            try:
+                formulacion = self.get_object()
+            except Exception:
+                formulacion = None
+        return puede_editar_formulacion(self.request.user, formulacion)
 
 
 class FormulacionListView(LoginRequiredMixin, ListView):
@@ -40,7 +55,12 @@ class FormulacionListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["categorias"] = Formulacion.Categoria.choices
+        context["categorias"] = (
+            Formulacion.objects.exclude(categoria__exact="")
+            .order_by("categoria")
+            .values_list("categoria", flat=True)
+            .distinct()
+        )
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -115,6 +135,11 @@ class FormulacionDetailView(LoginRequiredMixin, DetailView):
     model = Formulacion
     template_name = "formulaciones/formulacion_detail.html"
     context_object_name = "formulacion"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["puede_editar"] = puede_editar_formulacion(self.request.user, self.object)
+        return context
 
     def render_to_response(self, context, **response_kwargs):
         formulacion = self.get_object()
@@ -211,8 +236,11 @@ class FormulacionUpdateView(FormulacionBaseEditView):
 class FormulacionCambiarEstadoView(LoginRequiredMixin, PuedeEditarFormulacionMixin, View):
     estado_destino = None
 
+    def get_object(self):
+        return get_object_or_404(Formulacion, pk=self.kwargs["pk"])
+
     def post(self, request, pk):
-        formulacion = Formulacion.objects.get(pk=pk)
+        formulacion = self.get_object()
         formulacion.estado = self.estado_destino
         formulacion.save(update_fields=["estado", "actualizado_en"])
         messages.success(request, f"Estado actualizado a {formulacion.get_estado_display().lower()}.")

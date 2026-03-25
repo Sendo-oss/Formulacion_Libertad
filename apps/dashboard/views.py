@@ -23,7 +23,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             fecha_vencimiento__lte=hoy + timedelta(days=30),
         ).count()
         context["materias_sin_stock"] = MateriaPrima.objects.filter(stock_actual=0).count()
-        context["alertas_activas"] = Alerta.objects.filter(estado=Alerta.Estado.ACTIVA)[:10]
+        if self.request.user.rol != Usuario.Rol.ESTUDIANTE:
+            context["alertas_activas"] = Alerta.objects.filter(estado=Alerta.Estado.ACTIVA)[:10]
         if self.request.user.rol == Usuario.Rol.ADMINISTRADOR:
             context["solicitudes_recuperacion_pendientes"] = SolicitudRecuperacionContrasena.objects.filter(
                 estado=SolicitudRecuperacionContrasena.Estado.PENDIENTE

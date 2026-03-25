@@ -1,12 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, ListView, TemplateView, UpdateView
+from django.views.generic import CreateView, FormView, ListView, TemplateView, UpdateView
 
 from .forms import (
     CambioContrasenaObligatorioForm,
@@ -15,7 +14,8 @@ from .forms import (
     UsuarioCreationForm,
     UsuarioUpdateForm,
 )
-from .models import SolicitudRecuperacionContrasena, Usuario
+from .models import HistorialSistema, SolicitudRecuperacionContrasena, Usuario
+from .services import registrar_historial
 
 
 class SoloAdministradorMixin(UserPassesTestMixin):
@@ -43,12 +43,34 @@ class UsuarioCreateView(LoginRequiredMixin, SoloAdministradorMixin, CreateView):
     template_name = "usuarios/usuario_form.html"
     success_url = reverse_lazy("usuarios:lista")
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        registrar_historial(
+            self.request.user,
+            "Usuarios",
+            "Creacion de usuario",
+            f"Se creo el usuario {self.object.username} con rol {self.object.get_rol_display()}.",
+            entidad=self.object.username,
+        )
+        return response
+
 
 class UsuarioUpdateView(LoginRequiredMixin, SoloAdministradorMixin, UpdateView):
     model = Usuario
     form_class = UsuarioUpdateForm
     template_name = "usuarios/usuario_form.html"
     success_url = reverse_lazy("usuarios:lista")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        registrar_historial(
+            self.request.user,
+            "Usuarios",
+            "Actualizacion de usuario",
+            f"Se actualizo el usuario {self.object.username}.",
+            entidad=self.object.username,
+        )
+        return response
 
 
 class SolicitudRecuperacionCreateView(CreateView):
@@ -67,11 +89,19 @@ class SolicitudRecuperacionCreateView(CreateView):
         usuario = Usuario.objects.filter(email__iexact=correo).order_by("id").first()
         form.instance.correo = correo
         form.instance.usuario = usuario
+        response = super().form_valid(form)
+        registrar_historial(
+            None,
+            "Recuperacion de contrasena",
+            "Solicitud creada",
+            f"Se registro una solicitud de recuperacion para {correo}.",
+            entidad=correo,
+        )
         messages.success(
             self.request,
             "Tu solicitud fue registrada. Un administrador revisara el caso y te ayudara a restablecer el acceso.",
         )
-        return super().form_valid(form)
+        return response
 
 
 class SolicitudRecuperacionDoneView(TemplateView):
@@ -82,6 +112,12 @@ class SolicitudRecuperacionListView(LoginRequiredMixin, SoloAdministradorMixin, 
     model = SolicitudRecuperacionContrasena
     template_name = "usuarios/solicitud_recuperacion_list.html"
     context_object_name = "solicitudes"
+
+
+class HistorialSistemaListView(LoginRequiredMixin, SoloAdministradorMixin, ListView):
+    model = HistorialSistema
+    template_name = "usuarios/historial_list.html"
+    context_object_name = "registros"
 
 
 class SolicitudRecuperacionUpdateView(LoginRequiredMixin, SoloAdministradorMixin, UpdateView):
@@ -109,6 +145,13 @@ class SolicitudRecuperacionUpdateView(LoginRequiredMixin, SoloAdministradorMixin
             solicitud.fecha_atencion = None
             solicitud.atendida_por = None
         solicitud.save()
+        registrar_historial(
+            self.request.user,
+            "Recuperacion de contrasena",
+            "Gestion de solicitud",
+            f"Se actualizo la solicitud de {solicitud.correo} con estado {solicitud.get_estado_display().lower()}.",
+            entidad=solicitud.correo,
+        )
         messages.success(self.request, "La solicitud fue actualizada correctamente.")
         return redirect(self.success_url)
 
@@ -116,12 +159,20 @@ class SolicitudRecuperacionUpdateView(LoginRequiredMixin, SoloAdministradorMixin
 class SolicitudRecuperacionDeleteView(LoginRequiredMixin, SoloAdministradorMixin, View):
     def post(self, request, pk, *args, **kwargs):
         solicitud = get_object_or_404(SolicitudRecuperacionContrasena, pk=pk)
+        correo = solicitud.correo
         solicitud.delete()
+        registrar_historial(
+            request.user,
+            "Recuperacion de contrasena",
+            "Eliminacion de solicitud",
+            f"Se elimino la solicitud de recuperacion asociada a {correo}.",
+            entidad=correo,
+        )
         messages.success(request, "La solicitud fue eliminada correctamente.")
         return redirect("usuarios:recuperaciones")
 
 
-class CambioContrasenaObligatorioView(LoginRequiredMixin, PasswordChangeView):
+class CambioContrasenaObligatorioView(LoginRequiredMixin, FormView):
     form_class = CambioContrasenaObligatorioForm
     template_name = "usuarios/cambiar_contrasena.html"
     success_url = reverse_lazy("usuarios:cambio_contrasena_completado")
@@ -131,13 +182,25 @@ class CambioContrasenaObligatorioView(LoginRequiredMixin, PasswordChangeView):
             return redirect("dashboard:inicio")
         return super().dispatch(request, *args, **kwargs)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
-        response = super().form_valid(form)
+        form.save()
         self.request.user.debe_cambiar_contrasena = False
         self.request.user.save(update_fields=["debe_cambiar_contrasena"])
         update_session_auth_hash(self.request, self.request.user)
+        registrar_historial(
+            self.request.user,
+            "Seguridad",
+            "Cambio de contrasena",
+            f"El usuario {self.request.user.username} actualizo su contrasena obligatoria.",
+            entidad=self.request.user.username,
+        )
         messages.success(self.request, "Tu contrasena fue actualizada correctamente.")
-        return response
+        return redirect(self.success_url)
 
 
 class CambioContrasenaCompletadoView(TemplateView):

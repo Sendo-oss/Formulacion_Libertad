@@ -36,6 +36,12 @@
                     <div class="text-danger small">{{ form.categoria.errors }}</div>
                 </div>
                 <div class="col-md-4">
+                    <label class="form-label" for="{{ form.nueva_categoria.id_for_label }}">Agregar nueva categoria</label>
+                    {{ form.nueva_categoria }}
+                    <div class="form-text">{{ form.nueva_categoria.help_text }}</div>
+                    <div class="text-danger small">{{ form.nueva_categoria.errors }}</div>
+                </div>
+                <div class="col-md-4">
                     <label class="form-label" for="{{ form.tipo_formulacion.id_for_label }}">Tipo</label>
                     {{ form.tipo_formulacion }}
                     <div class="text-danger small">{{ form.tipo_formulacion.errors }}</div>
@@ -54,6 +60,13 @@
                     <label class="form-label" for="{{ form.fuente_referencia.id_for_label }}">Fuente de referencia</label>
                     {{ form.fuente_referencia }}
                     <div class="form-text">{{ form.fuente_referencia.help_text }}</div>
+                    <div class="form-text">
+                        Para el documento Word del estudiante, registra esta fuente con formato APA 7.
+                        Guia de apoyo:
+                        <a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/general_format.html" target="_blank" rel="noopener">
+                            Purdue OWL APA 7
+                        </a>
+                    </div>
                     <div class="text-danger small">{{ form.fuente_referencia.errors }}</div>
                 </div>
                 <div class="col-12">

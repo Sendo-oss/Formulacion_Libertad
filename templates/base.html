@@ -298,10 +298,14 @@
                 <div class="main-nav">
                     <a class="nav-link {% if '/materias-primas/' in request.path %}nav-current{% endif %}" href="{% url 'inventario:lista' %}">Materias primas</a>
                     <a class="nav-link {% if '/formulaciones/' in request.path %}nav-current{% endif %}" href="{% url 'formulaciones:lista' %}">Formulaciones</a>
+                    <a class="nav-link {% if '/documentacion/' in request.path %}nav-current{% endif %}" href="{% url 'documentacion:lista' %}">Documentacion</a>
                     <a class="nav-link {% if '/calculadora/' in request.path %}nav-current{% endif %}" href="{% url 'calculadora:inicio' %}">Calculadora</a>
-                    <a class="nav-link {% if '/alertas/' in request.path %}nav-current{% endif %}" href="{% url 'alertas:lista' %}">Alertas</a>
+                    {% if request.user.rol != "ESTUDIANTE" %}
+                        <a class="nav-link {% if '/alertas/' in request.path %}nav-current{% endif %}" href="{% url 'alertas:lista' %}">Alertas</a>
+                    {% endif %}
                     {% if request.user.rol == "ADMINISTRADOR" %}
                         <a class="nav-link {% if '/usuarios/' in request.path %}nav-current{% endif %}" href="{% url 'usuarios:lista' %}">Usuarios</a>
+                        <a class="nav-link {% if '/usuarios/historial/' in request.path %}nav-current{% endif %}" href="{% url 'usuarios:historial' %}">Historial</a>
                     {% endif %}
                 </div>
                 <div class="ms-auto user-panel">

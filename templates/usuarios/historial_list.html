@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Historial del sistema{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h3 mb-1">Historial del sistema</h1>
+        <p class="text-secondary mb-0">Registro de acciones relevantes realizado por los usuarios dentro de la plataforma.</p>
+    </div>
+    <a class="btn btn-outline-primary" href="{% url 'usuarios:lista' %}">Volver a usuarios</a>
+</div>
+
+<div class="panel-card card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Modulo</th>
+                    <th>Accion</th>
+                    <th>Entidad</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                    <tr>
+                        <td>{{ registro.fecha|date:"d/m/Y H:i" }}</td>
+                        <td>{{ registro.usuario.get_full_name|default:registro.usuario.username|default:"Sistema" }}</td>
+                        <td>{{ registro.modulo }}</td>
+                        <td>{{ registro.accion }}</td>
+                        <td>{{ registro.entidad|default:"-" }}</td>
+                        <td>{{ registro.descripcion }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-secondary">No hay registros en el historial.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

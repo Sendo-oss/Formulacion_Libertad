@@ -8,7 +8,7 @@
                 <span class="badge badge-soft rounded-pill mb-3">Entorno institucional ISTUL</span>
                 <h1 class="section-title mb-2">Panel de formulacion magistral</h1>
                 <p class="text-secondary mb-0">
-                    Consulta inventario, controla vencimientos, revisa alertas operativas y trabaja con calculos de apoyo desde una interfaz inspirada en el campus virtual institucional.
+                    Consulta inventario, controla vencimientos y trabaja con calculos de apoyo desde una interfaz inspirada en el campus virtual institucional.
                 </p>
             </div>
             <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
@@ -90,6 +90,7 @@
 {% endif %}
 
 <div class="row g-4">
+    {% if request.user.rol != "ESTUDIANTE" %}
     <div class="col-xl-7">
         <div class="panel-card card h-100">
             <div class="card-body p-4">
@@ -124,6 +125,9 @@
         </div>
     </div>
     <div class="col-xl-5">
+    {% else %}
+    <div class="col-xl-12">
+    {% endif %}
         <div class="panel-card card h-100" style="background: linear-gradient(180deg, rgba(10,49,73,0.96), rgba(14,58,90,0.96));">
             <div class="card-body p-4 text-white">
                 <span class="badge rounded-pill mb-3" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.14);">Accesos rapidos</span>
@@ -134,7 +138,9 @@
                 <div class="d-grid gap-3">
                     <a class="btn btn-light text-start py-3" href="{% url 'inventario:lista' %}">Consultar inventario</a>
                     <a class="btn btn-light text-start py-3" href="{% url 'formulaciones:lista' %}">Consultar formulaciones</a>
-                    <a class="btn btn-light text-start py-3" href="{% url 'alertas:lista' %}">Gestionar alertas</a>
+                    {% if request.user.rol != "ESTUDIANTE" %}
+                        <a class="btn btn-light text-start py-3" href="{% url 'alertas:lista' %}">Gestionar alertas</a>
+                    {% endif %}
                     <a class="btn btn-outline-light text-start py-3" href="{% url 'calculadora:inicio' %}">Abrir calculadora</a>
                 </div>
             </div>
@@ -166,7 +172,13 @@
             <div class="col-md-4">
                 <div class="rounded-4 p-4 h-100" style="background: rgba(11, 45, 67, 0.05);">
                     <h3 class="h6 text-uppercase text-secondary">Seguimiento</h3>
-                    <p class="mb-0 text-secondary">Monitorea alertas operativas y apoya el calculo academico con herramientas integradas.</p>
+                    <p class="mb-0 text-secondary">
+                        {% if request.user.rol == "ESTUDIANTE" %}
+                            Accede a documentos tecnicos y apoya el calculo academico con herramientas integradas.
+                        {% else %}
+                            Monitorea alertas operativas y apoya el calculo academico con herramientas integradas.
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         </div>

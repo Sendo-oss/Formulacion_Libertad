@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     CambioContrasenaCompletadoView,
     CambioContrasenaObligatorioView,
+    HistorialSistemaListView,
     SolicitudRecuperacionCreateView,
     SolicitudRecuperacionDeleteView,
     SolicitudRecuperacionDoneView,
@@ -22,6 +23,7 @@ urlpatterns = [
     path("recuperacion/", SolicitudRecuperacionCreateView.as_view(), name="recuperacion_solicitar"),
     path("recuperacion/enviada/", SolicitudRecuperacionDoneView.as_view(), name="recuperacion_enviada"),
     path("recuperaciones/", SolicitudRecuperacionListView.as_view(), name="recuperaciones"),
+    path("historial/", HistorialSistemaListView.as_view(), name="historial"),
     path("recuperaciones/<int:pk>/gestionar/", SolicitudRecuperacionUpdateView.as_view(), name="recuperacion_gestionar"),
     path("recuperaciones/<int:pk>/eliminar/", SolicitudRecuperacionDeleteView.as_view(), name="recuperacion_eliminar"),
     path("cambiar-contrasena/", CambioContrasenaObligatorioView.as_view(), name="cambiar_contrasena"),

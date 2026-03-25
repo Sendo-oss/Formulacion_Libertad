@@ -20,8 +20,8 @@
         <div class="col-md-3">
             <select class="form-select" name="categoria">
                 <option value="">Todas las categorias</option>
-                {% for value, label in categorias %}
-                    <option value="{{ value }}" {% if request.GET.categoria == value %}selected{% endif %}>{{ label }}</option>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria }}" {% if request.GET.categoria == categoria %}selected{% endif %}>{{ categoria }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -60,7 +60,7 @@
                         </td>
                         <td class="text-nowrap">
                             <a href="{% url 'formulaciones:detalle' formulacion.pk %}">Ver</a>
-                            {% if request.user.rol != "ESTUDIANTE" %}
+                            {% if request.user.rol == "ADMINISTRADOR" or formulacion.creado_por_id == request.user.id %}
                                 | <a href="{% url 'formulaciones:editar' formulacion.pk %}">Editar</a>
                             {% endif %}
                         </td>

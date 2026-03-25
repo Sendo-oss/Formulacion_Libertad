@@ -7,14 +7,16 @@
         <div class="d-flex gap-2">
             <a class="btn btn-outline-danger btn-sm" href="?export=pdf">Descargar PDF</a>
             <a class="btn btn-outline-secondary btn-sm" href="{% url 'calculadora:inicio' %}?tab=escalado&formulacion={{ formulacion.pk }}">Calcular componentes</a>
-            <a class="btn btn-outline-primary btn-sm" href="{% url 'formulaciones:editar' formulacion.pk %}">Editar</a>
-            {% if formulacion.estado != "ACTIVA" %}
+            {% if puede_editar %}
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'formulaciones:editar' formulacion.pk %}">Editar</a>
+            {% endif %}
+            {% if puede_editar and formulacion.estado != "ACTIVA" %}
                 <form method="post" action="{% url 'formulaciones:activar' formulacion.pk %}">
                     {% csrf_token %}
                     <button class="btn btn-outline-success btn-sm" type="submit">Activar</button>
                 </form>
             {% endif %}
-            {% if formulacion.estado != "INACTIVA" %}
+            {% if puede_editar and formulacion.estado != "INACTIVA" %}
                 <form method="post" action="{% url 'formulaciones:desactivar' formulacion.pk %}">
                     {% csrf_token %}
                     <button class="btn btn-outline-danger btn-sm" type="submit">Desactivar</button>
