@@ -6,6 +6,7 @@ from datetime import timedelta
 from apps.alertas.models import Alerta
 from apps.formulaciones.models import Formulacion
 from apps.inventario.models import MateriaPrima
+from apps.noticias.models import Noticia
 from apps.usuarios.models import SolicitudRecuperacionContrasena, Usuario
 
 
@@ -23,6 +24,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             fecha_vencimiento__lte=hoy + timedelta(days=30),
         ).count()
         context["materias_sin_stock"] = MateriaPrima.objects.filter(stock_actual=0).count()
+        context["noticias_recientes"] = Noticia.objects.filter(activa=True)[:3]
         if self.request.user.rol != Usuario.Rol.ESTUDIANTE:
             context["alertas_activas"] = Alerta.objects.filter(estado=Alerta.Estado.ACTIVA)[:10]
         if self.request.user.rol == Usuario.Rol.ADMINISTRADOR:

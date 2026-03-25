@@ -2,12 +2,15 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Formulaciones</h1>
+    <div>
+        <h1 class="h3 mb-0">Formulaciones</h1>
+        <p class="text-secondary mb-0">Tecnología Superior en Asistencia en Farmacia.</p>
+    </div>
     <div class="d-flex gap-2">
         <a class="btn btn-outline-danger" href="?q={{ request.GET.q|default:'' }}&categoria={{ request.GET.categoria|default:'' }}&export=pdf">Exportar PDF</a>
         <a class="btn btn-outline-success" href="?q={{ request.GET.q|default:'' }}&categoria={{ request.GET.categoria|default:'' }}&export=excel">Exportar Excel</a>
         {% if request.user.rol != "ESTUDIANTE" %}
-            <a class="btn btn-primary" href="{% url 'formulaciones:crear' %}">Nueva formulacion</a>
+            <a class="btn btn-primary" href="{% url 'formulaciones:crear' %}">Nueva formulación</a>
         {% endif %}
     </div>
 </div>

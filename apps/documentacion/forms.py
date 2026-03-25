@@ -6,12 +6,13 @@ from .models import DocumentoTecnico
 class DocumentoTecnicoForm(forms.ModelForm):
     class Meta:
         model = DocumentoTecnico
-        fields = ("titulo", "tipo_documento", "formulacion", "descripcion", "archivo")
+        fields = ("titulo", "tipo_documento", "formulacion", "materia_prima", "descripcion", "archivo")
         widgets = {
             "descripcion": forms.Textarea(attrs={"rows": 4}),
         }
         help_texts = {
-            "formulacion": "Opcional. Asocia el documento a una formulacion si corresponde.",
+            "formulacion": "Usa este campo para procedimientos o fichas técnicas relacionadas con una formulación.",
+            "materia_prima": "Usa este campo solo para fichas técnicas de materias primas.",
             "archivo": "Sube un archivo PDF.",
         }
 

@@ -6,7 +6,7 @@
     <div class="d-flex gap-2">
         <a class="btn btn-outline-secondary" href="{% url 'usuarios:historial' %}">Ver historial</a>
         <a class="btn btn-outline-primary" href="{% url 'usuarios:recuperaciones' %}">
-            Solicitudes de recuperacion
+            Solicitudes de recuperación
             {% if solicitudes_pendientes %}
                 <span class="badge text-bg-warning ms-1">{{ solicitudes_pendientes }}</span>
             {% endif %}
@@ -17,7 +17,7 @@
 
 {% if usuarios_con_cambio_pendiente %}
     <div class="alert alert-warning d-flex justify-content-between align-items-center">
-        <span>Hay {{ usuarios_con_cambio_pendiente }} usuario{{ usuarios_con_cambio_pendiente|pluralize }} con contrasena temporal pendiente de cambio.</span>
+        <span>Hay {{ usuarios_con_cambio_pendiente }} usuario{{ usuarios_con_cambio_pendiente|pluralize }} con contraseña temporal pendiente de cambio.</span>
         <a class="btn btn-sm btn-outline-dark" href="{% url 'usuarios:recuperaciones' %}">Revisar recuperaciones</a>
     </div>
 {% endif %}

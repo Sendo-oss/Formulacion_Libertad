@@ -57,8 +57,8 @@ class SolicitudRecuperacionContrasena(models.Model):
 
     class Meta:
         ordering = ["-fecha_solicitud"]
-        verbose_name = "Solicitud de recuperacion de contrasena"
-        verbose_name_plural = "Solicitudes de recuperacion de contrasena"
+        verbose_name = "Solicitud de recuperación de contraseña"
+        verbose_name_plural = "Solicitudes de recuperación de contraseña"
 
     def __str__(self):
         return f"{self.correo} - {self.get_estado_display()}"

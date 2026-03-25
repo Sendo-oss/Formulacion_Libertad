@@ -85,16 +85,15 @@ class SolicitudRecuperacionCreateView(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        correo = form.cleaned_data["correo"]
+        correo = form.instance.correo = f"{form.cleaned_data['correo_usuario']}@itslibertad.edu.ec"
         usuario = Usuario.objects.filter(email__iexact=correo).order_by("id").first()
-        form.instance.correo = correo
         form.instance.usuario = usuario
         response = super().form_valid(form)
         registrar_historial(
             None,
-            "Recuperacion de contrasena",
+            "Recuperación de contraseña",
             "Solicitud creada",
-            f"Se registro una solicitud de recuperacion para {correo}.",
+            f"Se registró una solicitud de recuperación para {correo}.",
             entidad=correo,
         )
         messages.success(
@@ -147,7 +146,7 @@ class SolicitudRecuperacionUpdateView(LoginRequiredMixin, SoloAdministradorMixin
         solicitud.save()
         registrar_historial(
             self.request.user,
-            "Recuperacion de contrasena",
+            "Recuperación de contraseña",
             "Gestion de solicitud",
             f"Se actualizo la solicitud de {solicitud.correo} con estado {solicitud.get_estado_display().lower()}.",
             entidad=solicitud.correo,
@@ -163,9 +162,9 @@ class SolicitudRecuperacionDeleteView(LoginRequiredMixin, SoloAdministradorMixin
         solicitud.delete()
         registrar_historial(
             request.user,
-            "Recuperacion de contrasena",
+            "Recuperación de contraseña",
             "Eliminacion de solicitud",
-            f"Se elimino la solicitud de recuperacion asociada a {correo}.",
+            f"Se eliminó la solicitud de recuperación asociada a {correo}.",
             entidad=correo,
         )
         messages.success(request, "La solicitud fue eliminada correctamente.")
@@ -195,11 +194,11 @@ class CambioContrasenaObligatorioView(LoginRequiredMixin, FormView):
         registrar_historial(
             self.request.user,
             "Seguridad",
-            "Cambio de contrasena",
-            f"El usuario {self.request.user.username} actualizo su contrasena obligatoria.",
+            "Cambio de contraseña",
+            f"El usuario {self.request.user.username} actualizó su contraseña obligatoria.",
             entidad=self.request.user.username,
         )
-        messages.success(self.request, "Tu contrasena fue actualizada correctamente.")
+        messages.success(self.request, "Tu contraseña fue actualizada correctamente.")
         return redirect(self.success_url)
 
 

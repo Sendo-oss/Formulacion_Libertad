@@ -15,7 +15,7 @@ class StyledFormMixin:
 class EscaladoFormulacionForm(StyledFormMixin, forms.Form):
     formulacion = forms.ModelChoiceField(
         queryset=Formulacion.objects.filter(estado=Formulacion.Estado.ACTIVA).order_by("codigo"),
-        label="Formulacion",
+        label="Formulación",
     )
     cantidad_objetivo = forms.DecimalField(label="Cantidad final deseada", min_value=Decimal("0.01"))
     unidad_objetivo = forms.CharField(label="Unidad final", initial="g", max_length=20)

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Noticias{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h3 mb-1">Noticias y actualidad</h1>
+        <p class="text-secondary mb-0">Consulta novedades, eventos y contenidos recientes sobre formulación magistral.</p>
+    </div>
+    {% if puede_gestionar %}
+        <a class="btn btn-primary" href="{% url 'noticias:crear' %}">Publicar noticia</a>
+    {% endif %}
+</div>
+
+<form class="panel-card card card-body mb-4" method="get">
+    <div class="row g-2">
+        <div class="col-md-10">
+            <input class="form-control" type="search" name="q" value="{{ request.GET.q }}" placeholder="Buscar por título o contenido">
+        </div>
+        <div class="col-md-2 d-grid">
+            <button class="btn btn-outline-primary" type="submit">Buscar</button>
+        </div>
+    </div>
+</form>
+
+<div class="row g-4">
+    {% for noticia in noticias %}
+        <div class="col-lg-6">
+            <div class="panel-card card h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                        <div>
+                            <span class="badge badge-soft rounded-pill mb-2">Actualidad</span>
+                            <h2 class="h5 mb-1">{{ noticia.titulo }}</h2>
+                            <div class="text-secondary small">
+                                {{ noticia.publicada_en|date:"d/m/Y H:i" }} | {{ noticia.creada_por.get_full_name|default:noticia.creada_por.username }}
+                            </div>
+                        </div>
+                        {% if not noticia.activa %}
+                            <span class="badge text-bg-secondary">Oculta</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-secondary">{{ noticia.resumen }}</p>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-primary btn-sm" href="{% url 'noticias:detalle' noticia.pk %}">Ver detalle</a>
+                        {% if request.user.rol == "ADMINISTRADOR" or noticia.creada_por_id == request.user.id %}
+                            <a class="btn btn-outline-secondary btn-sm" href="{% url 'noticias:editar' noticia.pk %}">Editar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="panel-card card">
+                <div class="card-body p-4 text-secondary">No hay noticias registradas.</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

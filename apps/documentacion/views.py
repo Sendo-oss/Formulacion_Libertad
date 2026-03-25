@@ -38,29 +38,35 @@ class DocumentoTecnicoListView(LoginRequiredMixin, ListView):
     context_object_name = "documentos"
 
     def get_queryset(self):
-        queryset = super().get_queryset().select_related("subido_por", "formulacion")
+        queryset = super().get_queryset().select_related("subido_por", "formulacion", "materia_prima")
         termino = self.request.GET.get("q")
         tipo = self.request.GET.get("tipo")
         formulacion = self.request.GET.get("formulacion")
+        materia_prima = self.request.GET.get("materia_prima")
         if termino:
             queryset = queryset.filter(
                 Q(titulo__icontains=termino)
                 | Q(descripcion__icontains=termino)
                 | Q(formulacion__nombre__icontains=termino)
+                | Q(materia_prima__nombre__icontains=termino)
             )
         if tipo:
             queryset = queryset.filter(tipo_documento=tipo)
         if formulacion:
             queryset = queryset.filter(formulacion_id=formulacion)
+        if materia_prima:
+            queryset = queryset.filter(materia_prima_id=materia_prima)
         return queryset
 
     def get_context_data(self, **kwargs):
         from apps.formulaciones.models import Formulacion
+        from apps.inventario.models import MateriaPrima
 
         context = super().get_context_data(**kwargs)
         context["tipos_documento"] = DocumentoTecnico.TipoDocumento.choices
         context["puede_subir"] = self.request.user.rol in {Usuario.Rol.ADMINISTRADOR, Usuario.Rol.PROFESOR}
         context["formulaciones"] = Formulacion.objects.order_by("codigo", "nombre")
+        context["materias_primas"] = MateriaPrima.objects.order_by("nombre", "lote")
         documentos = context["documentos"]
         context["documentos_ficha_tecnica"] = [
             documento

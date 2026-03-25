@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Formulacion Magistral{% endblock %}</title>
+    <title>{% block title %}Formulación Magistral{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +45,14 @@
             gap: 0.85rem;
         }
         .navbar .container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
             gap: 1.4rem;
+            row-gap: 0.85rem;
+        }
+        .navbar-brand {
+            flex: 0 0 auto;
         }
         .brand-logo-wrap {
             display: flex;
@@ -95,9 +102,11 @@
         .main-nav {
             display: flex;
             align-items: center;
+            flex: 1 1 720px;
+            flex-wrap: wrap;
             gap: 0.45rem;
             padding: 0.35rem;
-            border-radius: 999px;
+            border-radius: 1.4rem;
             background: rgba(255, 255, 255, 0.06);
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
         }
@@ -224,6 +233,8 @@
         .user-panel {
             display: flex;
             align-items: center;
+            flex: 0 0 auto;
+            flex-wrap: wrap;
             gap: 0.8rem;
             padding: 0.5rem 0.7rem 0.5rem 1rem;
             border-radius: 999px;
@@ -255,6 +266,25 @@
         .logout-btn:hover {
             color: #fff;
         }
+        .topbar .container {
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .topbar .container span:last-child {
+            margin-left: auto;
+            text-align: right;
+        }
+        @media (max-width: 1399.98px) {
+            .main-nav {
+                flex: 1 1 100%;
+                order: 3;
+                justify-content: center;
+            }
+            .user-panel {
+                order: 2;
+                margin-left: auto;
+            }
+        }
         @media (max-width: 991.98px) {
             .navbar .container {
                 flex-direction: column;
@@ -275,8 +305,8 @@
     <div class="site-shell">
     <div class="topbar py-2">
         <div class="container d-flex justify-content-between align-items-center">
-            <span>Instituto Superior Tecnologico Universitario Libertad</span>
-            <span>Sistema de formulacion magistral</span>
+            <span>Instituto Superior Tecnológico Universitario Libertad</span>
+            <span>Tecnología Superior en Asistencia en Farmacia</span>
         </div>
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
@@ -298,7 +328,8 @@
                 <div class="main-nav">
                     <a class="nav-link {% if '/materias-primas/' in request.path %}nav-current{% endif %}" href="{% url 'inventario:lista' %}">Materias primas</a>
                     <a class="nav-link {% if '/formulaciones/' in request.path %}nav-current{% endif %}" href="{% url 'formulaciones:lista' %}">Formulaciones</a>
-                    <a class="nav-link {% if '/documentacion/' in request.path %}nav-current{% endif %}" href="{% url 'documentacion:lista' %}">Documentacion</a>
+                    <a class="nav-link {% if '/documentacion/' in request.path %}nav-current{% endif %}" href="{% url 'documentacion:lista' %}">Documentación</a>
+                    <a class="nav-link {% if '/noticias/' in request.path %}nav-current{% endif %}" href="{% url 'noticias:lista' %}">Noticias</a>
                     <a class="nav-link {% if '/calculadora/' in request.path %}nav-current{% endif %}" href="{% url 'calculadora:inicio' %}">Calculadora</a>
                     {% if request.user.rol != "ESTUDIANTE" %}
                         <a class="nav-link {% if '/alertas/' in request.path %}nav-current{% endif %}" href="{% url 'alertas:lista' %}">Alertas</a>

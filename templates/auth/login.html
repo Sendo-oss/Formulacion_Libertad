@@ -147,10 +147,10 @@
         <div class="col-lg-8 d-none d-lg-block">
             <div class="h-100 position-relative login-visual">
                 <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex flex-column justify-content-end p-5 text-white">
-                    <span class="badge rounded-pill align-self-start mb-3" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.22);">Laboratorio academico</span>
-                    <h1 class="display-6 fw-bold mb-3 text-white">Formulacion magistral con identidad institucional</h1>
+                    <span class="badge rounded-pill align-self-start mb-3" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.22);">Laboratorio académico</span>
+                    <h1 class="display-6 fw-bold mb-3 text-white">Formulación magistral con identidad institucional</h1>
                     <p class="mb-0" style="max-width: 420px; color: rgba(255,255,255,0.9);">
-                        Plataforma para el control de materias primas, formulaciones, alertas y calculos farmaceuticos del Instituto Libertad.
+                        Plataforma para el control de materias primas, formulaciones, alertas y cálculos farmacéuticos del Instituto Libertad.
                     </p>
                 </div>
             </div>
@@ -159,21 +159,14 @@
             <div class="w-100 p-4 p-md-5 p-xl-6">
                 <div class="mx-auto login-shell" style="max-width: 560px;">
                     <div class="position-relative">
-                        <div class="login-brand-mini">
-                            <img src="{% static 'img/logo-istul.png' %}" alt="ISTUL">
-                            <span>
-                                <small>Instituto universitario</small>
-                                <strong>Libertad</strong>
-                            </span>
-                        </div>
                         <span class="login-kicker mb-3">Acceso institucional</span>
                         <h2 class="section-title display-6 mb-2">Acceso al sistema</h2>
                         <p class="text-secondary fs-5 mb-4">
-                            Ingresa con tu cuenta para continuar con la gestion del laboratorio.
+                            Ingresa con tu cuenta para continuar con la gestión del laboratorio.
                         </p>
                         <div class="login-note mb-4">
                             <strong>Entorno seguro</strong>
-                            Solo personal autorizado puede registrar formulaciones, revisar alertas y trabajar con calculos farmaceuticos.
+                            Solo personal autorizado puede registrar formulaciones, revisar alertas y trabajar con cálculos farmacéuticos.
                         </div>
                         <form method="post" autocomplete="off">
                             {% csrf_token %}
@@ -187,7 +180,7 @@
                                 </div>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label fw-semibold" for="{{ form.password.id_for_label }}">Contrasena</label>
+                                <label class="form-label fw-semibold" for="{{ form.password.id_for_label }}">Contraseña</label>
                                 <div class="input-shell">
                                     <svg class="input-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path d="M17 9h-1V7a4 4 0 1 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4Zm2 8a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 12 15.5Z" fill="currentColor"/>
@@ -196,7 +189,7 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end mb-4">
-                                <a href="{% url 'usuarios:recuperacion_solicitar' %}" class="text-decoration-none fw-semibold" style="color: var(--brand);">Olvide mi contrasena</a>
+                                <a href="{% url 'usuarios:recuperacion_solicitar' %}" class="text-decoration-none fw-semibold" style="color: var(--brand);">Olvidé mi contraseña</a>
                             </div>
                             <button class="btn btn-primary w-100 login-submit" type="submit">Ingresar al sistema</button>
                         </form>

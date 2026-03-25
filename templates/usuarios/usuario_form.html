@@ -9,7 +9,7 @@
 <div class="panel-card card">
     <div class="card-body p-4 p-lg-5">
         <div class="mb-4">
-            <span class="badge badge-soft rounded-pill mb-3">Gestion institucional</span>
+            <span class="badge badge-soft rounded-pill mb-3">Gestión institucional</span>
             <p class="text-secondary mb-0">Crea o actualiza cuentas para administrar permisos y acceso al sistema.</p>
         </div>
         <form method="post">
@@ -18,7 +18,14 @@
                 {% for field in form %}
                     <div class="col-md-6">
                         <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {{ field }}
+                        {% if field.name == "correo_usuario" %}
+                            <div class="input-group">
+                                {{ field }}
+                                <span class="input-group-text">@itslibertad.edu.ec</span>
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
                         {% if field.help_text %}
                             <div class="form-text">{{ field.help_text }}</div>
                         {% endif %}
