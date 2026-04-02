@@ -70,7 +70,7 @@ DATABASES = {
         "USER": get_env("DB_USER", "postgres"),
         "PASSWORD": get_env("DB_PASSWORD", "intesud"),
         "HOST": get_env("DB_HOST", "127.0.0.1"),
-        "PORT": get_env("DB_PORT", "5434"),
+        "PORT": get_env("DB_PORT", "5432"),
     }
 }
 
@@ -83,6 +83,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+# Redirigir a /login/ en vez de /accounts/login/
+LOGIN_URL = '/login/'
 
 LANGUAGE_CODE = "es-ec"
 TIME_ZONE = "America/Guayaquil"

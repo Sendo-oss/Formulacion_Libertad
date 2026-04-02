@@ -1,3 +1,4 @@
+<<<<<<< ours
 # Arquitectura Propuesta
 
 ## Enfoque general
@@ -117,3 +118,91 @@ Reglas recomendadas:
 - preferir estados activos e inactivos
 - registrar usuario creador y fechas de auditoria
 
+=======
+# Arquitectura funcional propuesta
+
+## 1. Módulos
+
+### Módulo de Usuarios
+- Gestión de cuentas y roles (`Administrador`, `Profesor`, `Estudiante`).
+- Control de acceso con permisos de Django (`Group` + `Permission`).
+- Trazabilidad de quién crea o actualiza registros críticos.
+
+### Módulo de Materias Primas
+Permite crear y mantener registros con los campos:
+- nombre
+- número CAS
+- número EINECS
+- lote
+- fecha de elaboración
+- fecha de vencimiento
+- casa comercial
+- stock actual
+- stock mínimo
+- unidad de medida
+- observaciones
+- estado
+
+Reglas clave:
+- Todo registro debe poder editarse.
+- El estado puede calcularse con base en fechas y stock (opcional) o mantenerse manual.
+
+### Módulo de Formulaciones
+- Registro de formulaciones magistrales.
+- Datos principales:
+  - código
+  - nombre
+  - descripción
+  - tipo
+  - origen (`institucional` o `docente`)
+  - estado
+  - observaciones
+- Relación N:M con materias primas por tabla intermedia `FormulacionDetalle`.
+- En `FormulacionDetalle` se guarda cantidad y unidad.
+
+### Módulo de Alertas
+Generación automática de alertas cuando una materia prima:
+- está próxima a caducar
+- está caducada
+- tiene stock bajo
+- está sin stock
+
+Datos de alerta:
+- tipo
+- materia prima
+- mensaje
+- prioridad
+- estado
+- fecha de generación
+
+## 2. Arquitectura por capas
+
+1. **Presentación (Django Templates):**
+   - Vistas de consulta y formularios CRUD.
+   - Panel de alertas con filtros por prioridad/estado.
+
+2. **Aplicación (Django Views/Services):**
+   - Lógica de negocio para validaciones y permisos.
+   - Servicios para generación y cierre de alertas.
+
+3. **Persistencia (Django ORM + PostgreSQL):**
+   - Modelos normalizados para usuarios, materias primas, formulaciones y alertas.
+
+4. **Tareas programadas (cron/Celery beat):**
+   - Proceso diario para recalcular alertas de vencimiento y stock.
+
+## 3. Control de acceso (RBAC)
+
+- `Administrador`: CRUD completo + administración de usuarios.
+- `Profesor`: crear/editar formulaciones y consultar/actualizar información técnica autorizada.
+- `Estudiante`: lectura de materias primas, formulaciones y alertas visibles.
+
+Sugerencia: usar decoradores `@permission_required` y validaciones en consultas para restringir mutaciones.
+
+## 4. Escalabilidad funcional
+
+Para permitir nuevas formulaciones sin modificar código:
+- Modelar formulaciones de forma parametrizable (datos en BD, no hardcodeados).
+- Usar tabla detalle para ingredientes y cantidades dinámicas.
+- Evitar lógica acoplada a códigos fijos de formulación.
+>>>>>>> theirs

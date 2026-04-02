@@ -1,3 +1,4 @@
+<<<<<<< ours
 # Modelo de Datos
 
 ## Entidades principales
@@ -255,3 +256,69 @@ class Alerta(models.Model):
     fecha_atencion = models.DateTimeField(null=True, blank=True)
 ```
 
+=======
+# Modelo de datos (ER lógico)
+
+## Entidades principales
+
+1. **Rol**
+   - nombre (único): administrador, profesor, estudiante
+
+2. **Usuario**
+   - username, email, password
+   - rol (FK a rol)
+
+3. **MateriaPrima**
+   - nombre
+   - cas
+   - einecs
+   - lote
+   - fecha_elaboracion
+   - fecha_vencimiento
+   - casa_comercial
+   - stock_actual
+   - stock_minimo
+   - unidad_medida
+   - observaciones
+   - estado
+   - creado_por (FK a usuario)
+
+4. **Formulacion**
+   - codigo (único)
+   - nombre
+   - descripcion
+   - tipo_formulacion
+   - origen (institucional/docente)
+   - estado
+   - observaciones
+   - creado_por (FK a usuario)
+
+5. **FormulacionDetalle** (tabla intermedia)
+   - formulacion (FK)
+   - materia_prima (FK)
+   - cantidad
+   - unidad_medida
+   - restricción única (formulación + materia prima)
+
+6. **Alerta**
+   - tipo_alerta (proxima_caducidad/caducada/stock_bajo/sin_stock)
+   - materia_prima (FK)
+   - mensaje
+   - prioridad (baja/media/alta/critica)
+   - estado (nueva/en_revision/resuelta)
+   - fecha_generacion
+
+## Relaciones
+- Un rol tiene muchos usuarios (1:N).
+- Un usuario registra muchas materias primas (1:N).
+- Un usuario crea muchas formulaciones (1:N).
+- Una formulación tiene muchas materias primas (N:M con `FormulacionDetalle`).
+- Una materia prima participa en muchas formulaciones (N:M).
+- Una materia prima tiene muchas alertas (1:N).
+
+## Reglas recomendadas
+- Índices en `cas`, `lote`, `fecha_vencimiento` y `estado` en materias primas.
+- Índices en `tipo_alerta`, `estado`, `fecha_generacion` en alertas.
+- `stock_actual` y `stock_minimo` con validación >= 0.
+- Restricción de unicidad para `codigo` en formulaciones.
+>>>>>>> theirs
