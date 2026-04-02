@@ -10,6 +10,7 @@ class MateriaPrimaAdmin(admin.ModelAdmin):
         "lote",
         "fecha_vencimiento",
         "requiere_control_caducidad",
+        "dias_alerta_vencimiento",
         "stock_actual",
         "stock_minimo",
         "unidad_medida",

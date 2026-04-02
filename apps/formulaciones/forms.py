@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet, inlineformset_factory
@@ -78,6 +80,9 @@ class BaseFormulacionDetalleFormSet(BaseInlineFormSet):
         super().clean()
         detalles_validos = 0
         materias = set()
+        total_porcentaje = Decimal("0.00")
+        hay_porcentajes = False
+        hay_otras_unidades = False
 
         for form in self.forms:
             if not hasattr(form, "cleaned_data"):
@@ -93,11 +98,28 @@ class BaseFormulacionDetalleFormSet(BaseInlineFormSet):
                     raise ValidationError("Cada componente debe tener materia prima, cantidad y unidad de medida.")
                 if materia.pk in materias:
                     raise ValidationError("No puedes repetir la misma materia prima dentro de una formulacion.")
+                if unidad == FormulacionDetalle.UnidadMedida.PORCENTAJE:
+                    hay_porcentajes = True
+                    if cantidad > Decimal("100.00"):
+                        raise ValidationError(
+                            f"El componente '{materia.nombre}' no puede superar 100%."
+                        )
+                    total_porcentaje += cantidad
+                else:
+                    hay_otras_unidades = True
                 materias.add(materia.pk)
                 detalles_validos += 1
 
         if detalles_validos == 0:
             raise ValidationError("Debes registrar al menos un componente en la formulacion.")
+        if hay_porcentajes and hay_otras_unidades:
+            raise ValidationError(
+                "Si una formulacion usa porcentaje (%), todos sus componentes deben registrarse en porcentaje."
+            )
+        if hay_porcentajes and total_porcentaje != Decimal("100.00"):
+            raise ValidationError(
+                f"La formulacion en porcentaje debe sumar exactamente 100%. Total actual: {total_porcentaje}."
+            )
 
 
 FormulacionDetalleFormSet = inlineformset_factory(
@@ -109,7 +131,7 @@ FormulacionDetalleFormSet = inlineformset_factory(
     formset=BaseFormulacionDetalleFormSet,
     widgets={
         "materia_prima": forms.Select(attrs={"class": "form-select"}),
-        "cantidad": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+        "cantidad": forms.NumberInput(attrs={"class": "form-control", "step": "0.01", "min": "0.01"}),
         "unidad_medida": forms.Select(
             attrs={"class": "form-select"},
             choices=FormulacionDetalle.UnidadMedida.choices,

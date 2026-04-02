@@ -38,11 +38,14 @@ class CalculadoraView(LoginRequiredMixin, View):
             unidad_objetivo = form.cleaned_data["unidad_objetivo"]
             detalles = list(formulacion.detalles.select_related("materia_prima").all())
             total_base = sum((detalle.cantidad for detalle in detalles), Decimal("0.00"))
+            usa_base_100 = any(detalle.unidad_medida == "%" for detalle in detalles)
             componentes = []
+            total_ajustado = Decimal("0.00")
             if total_base > 0:
                 for detalle in detalles:
                     cantidad_ajustada = redondear((detalle.cantidad / total_base) * cantidad_objetivo)
                     unidad_resultado = unidad_objetivo if detalle.unidad_medida == "%" else detalle.unidad_medida
+                    total_ajustado += cantidad_ajustada
                     componentes.append(
                         {
                             "orden": detalle.orden,
@@ -58,6 +61,8 @@ class CalculadoraView(LoginRequiredMixin, View):
                 "cantidad_objetivo": cantidad_objetivo,
                 "unidad_objetivo": unidad_objetivo,
                 "total_base": total_base,
+                "total_ajustado": total_ajustado,
+                "usa_base_100": usa_base_100,
                 "componentes": componentes,
             }
 

@@ -89,6 +89,13 @@
                 <h2 class="h5 mb-0">Componentes de la formulación</h2>
                 <button type="button" class="btn btn-outline-primary btn-sm" id="add-component">Agregar componente</button>
             </div>
+            <div class="alert alert-secondary py-2 px-3 small">
+                Si la formulacion se registra en <strong>%</strong>, todos sus componentes deben estar en <strong>%</strong> y la suma total debe ser exactamente <strong>100</strong>.
+            </div>
+            <div class="alert alert-light border py-2 px-3 small d-flex justify-content-between align-items-center">
+                <span>Sumatoria actual en porcentaje</span>
+                <strong id="porcentaje-total">0.00%</strong>
+            </div>
             <div class="table-responsive">
                 <table class="table align-middle" id="components-table">
                     <thead>
@@ -163,6 +170,31 @@
         const totalForms = document.getElementById("id_detalles-TOTAL_FORMS");
         const tableBody = document.querySelector("#components-table tbody");
         const template = document.getElementById("empty-form-template").innerHTML;
+        const porcentajeTotal = document.getElementById("porcentaje-total");
+
+        function actualizarSumatoria() {
+            let total = 0;
+            document.querySelectorAll("#components-table tbody tr").forEach((row) => {
+                if (row.style.display === "none") return;
+                const unidad = row.querySelector("select[name$='-unidad_medida']");
+                const cantidad = row.querySelector("input[name$='-cantidad']");
+                if (!unidad || !cantidad) return;
+                if (unidad.value !== "%") return;
+                const valor = Number.parseFloat((cantidad.value || "0").replace(",", "."));
+                if (!Number.isNaN(valor)) {
+                    total += valor;
+                }
+            });
+            porcentajeTotal.textContent = `${total.toFixed(2)}%`;
+            porcentajeTotal.classList.remove("text-success", "text-danger", "text-body");
+            if (total === 0) {
+                porcentajeTotal.classList.add("text-body");
+            } else if (Math.abs(total - 100) < 0.001) {
+                porcentajeTotal.classList.add("text-success");
+            } else {
+                porcentajeTotal.classList.add("text-danger");
+            }
+        }
 
         function bindRemoveButtons(scope) {
             scope.querySelectorAll(".remove-component").forEach((button) => {
@@ -178,7 +210,17 @@
                         row.remove();
                         totalForms.value = document.querySelectorAll("#components-table tbody tr").length;
                     }
+                    actualizarSumatoria();
                 });
+            });
+        }
+
+        function bindSumListeners(scope) {
+            scope.querySelectorAll("input[name$='-cantidad'], select[name$='-unidad_medida']").forEach((field) => {
+                if (field.dataset.sumBound === "true") return;
+                field.dataset.sumBound = "true";
+                field.addEventListener("input", actualizarSumatoria);
+                field.addEventListener("change", actualizarSumatoria);
             });
         }
 
@@ -188,9 +230,13 @@
             tableBody.insertAdjacentHTML("beforeend", newRowHtml);
             totalForms.value = formIndex + 1;
             bindRemoveButtons(tableBody);
+            bindSumListeners(tableBody);
+            actualizarSumatoria();
         });
 
         bindRemoveButtons(document);
+        bindSumListeners(document);
+        actualizarSumatoria();
     })();
 </script>
 {% endblock %}

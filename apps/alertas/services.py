@@ -6,10 +6,6 @@ from apps.inventario.models import MateriaPrima
 
 from .models import Alerta
 
-
-DIAS_ALERTA_CADUCIDAD = 30
-
-
 def generar_alertas_materia_prima(materia_prima):
     hoy = timezone.localdate()
     alertas = []
@@ -24,12 +20,15 @@ def generar_alertas_materia_prima(materia_prima):
                     "mensaje": f"La materia prima {materia_prima.nombre} esta caducada.",
                 }
             )
-        elif materia_prima.fecha_vencimiento <= hoy + timedelta(days=DIAS_ALERTA_CADUCIDAD):
+        elif materia_prima.fecha_vencimiento <= hoy + timedelta(days=materia_prima.dias_alerta_vencimiento):
             alertas.append(
                 {
                     "tipo_alerta": Alerta.Tipo.PROXIMA_CADUCIDAD,
                     "prioridad": Alerta.Prioridad.ALTA,
-                    "mensaje": f"La materia prima {materia_prima.nombre} vencera pronto.",
+                    "mensaje": (
+                        f"La materia prima {materia_prima.nombre} vencera pronto. "
+                        f"Anticipacion configurada: {materia_prima.dias_alerta_vencimiento} dias."
+                    ),
                 }
             )
 

@@ -12,7 +12,7 @@ class DocumentoTecnicoForm(forms.ModelForm):
         }
         help_texts = {
             "formulacion": "Usa este campo para procedimientos o fichas técnicas relacionadas con una formulación.",
-            "materia_prima": "Usa este campo solo para fichas técnicas de materias primas.",
+            "materia_prima": "Usa este campo para procedimientos o fichas técnicas relacionadas con una materia prima.",
             "archivo": "Sube un archivo PDF.",
         }
 

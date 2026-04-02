@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from .forms import BaseFormulacionDetalleFormSet
 from .models import Formulacion, FormulacionDetalle
 
 
 class FormulacionDetalleInline(admin.TabularInline):
     model = FormulacionDetalle
     extra = 1
+    formset = BaseFormulacionDetalleFormSet
 
 
 @admin.register(Formulacion)

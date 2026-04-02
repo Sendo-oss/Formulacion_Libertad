@@ -14,6 +14,9 @@
 <div class="panel-card card">
     <div class="card-body p-4">
         <h2 class="h5 mb-3">Ajuste de componentes</h2>
+        <div class="alert alert-warning">
+            Esta calculadora realiza calculos unicamente en relacion porcentual.
+        </div>
         <form method="post" class="row g-3">
             {% csrf_token %}
             <div class="col-md-6">{{ escalado_form.formulacion.label_tag }}{{ escalado_form.formulacion }}</div>
@@ -23,7 +26,11 @@
         </form>
         {% if resultado_escalado %}
             <div class="alert alert-info mt-4">
-                Base registrada: {{ resultado_escalado.total_base }} unidades relativas. Se ajustaron componentes para una salida final de <strong>{{ resultado_escalado.cantidad_objetivo }} {{ resultado_escalado.unidad_objetivo }}</strong>.
+                {% if resultado_escalado.usa_base_100 %}
+                    Base registrada: <strong>100</strong> para componentes porcentuales. Se ajustaron componentes para una salida final de <strong>{{ resultado_escalado.cantidad_objetivo }} {{ resultado_escalado.unidad_objetivo }}</strong>.
+                {% else %}
+                    Base registrada: {{ resultado_escalado.total_base }} unidades relativas. Se ajustaron componentes para una salida final de <strong>{{ resultado_escalado.cantidad_objetivo }} {{ resultado_escalado.unidad_objetivo }}</strong>.
+                {% endif %}
             </div>
             <div class="table-responsive">
                 <table class="table table-striped align-middle mb-0">
@@ -46,6 +53,12 @@
                         {% empty %}
                             <tr><td colspan="4">La formulación seleccionada no tiene componentes registrados.</td></tr>
                         {% endfor %}
+                        {% if resultado_escalado.componentes %}
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end"><strong>Total ajustado</strong></td>
+                                <td><strong>{{ resultado_escalado.total_ajustado }} {{ resultado_escalado.unidad_objetivo }}</strong></td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

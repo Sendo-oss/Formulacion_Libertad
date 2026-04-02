@@ -42,6 +42,8 @@
                     <dd class="col-sm-8">{{ materia_prima.vencimiento_texto }}</dd>
                     <dt class="col-sm-4">Control de caducidad</dt>
                     <dd class="col-sm-8">{{ materia_prima.requiere_control_caducidad|yesno:"Si,No" }}</dd>
+                    <dt class="col-sm-4">Dias alerta vencimiento</dt>
+                    <dd class="col-sm-8">{{ materia_prima.dias_alerta_vencimiento }}</dd>
                     <dt class="col-sm-4">Stock actual</dt>
                     <dd class="col-sm-8">{{ materia_prima.stock_actual }} {{ materia_prima.unidad_medida }}</dd>
                     <dt class="col-sm-4">Stock minimo</dt>

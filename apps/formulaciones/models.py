@@ -60,7 +60,10 @@ class Formulacion(models.Model):
 class FormulacionDetalle(models.Model):
     class UnidadMedida(models.TextChoices):
         PORCENTAJE = "%", "%"
+        GRAMO = "g", "g"
         MILILITRO = "ml", "ml"
+        UNIDAD = "u", "u"
+        ONZA = "oz", "oz"
 
     formulacion = models.ForeignKey(Formulacion, on_delete=models.CASCADE, related_name="detalles")
     materia_prima = models.ForeignKey(MateriaPrima, on_delete=models.PROTECT, related_name="detalles_formulacion")

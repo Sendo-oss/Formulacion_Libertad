@@ -56,12 +56,10 @@
 
 <div class="panel-card card mt-4">
     <div class="card-body">
-        <h2 class="h5 mb-3">Vista previa del PDF</h2>
-        <p class="mb-3">Puedes visualizar el documento aquí mismo o abrirlo en una nueva pestaña para descargarlo.</p>
-        <div class="ratio ratio-16x9 border rounded-4 overflow-hidden mb-3" style="background: #f8fafc;">
-            <iframe src="{{ documento.archivo.url }}" title="{{ documento.titulo }}" class="w-100 h-100 border-0"></iframe>
+        <h2 class="h5 mb-3">Documento PDF</h2>
+        <div class="alert alert-secondary mb-3">
+            Por compatibilidad, este documento se abre en una nueva pestaña para visualizarlo o descargarlo.
         </div>
-        <a class="btn btn-primary" href="{{ documento.archivo.url }}" target="_blank" rel="noopener">Visualizar o descargar PDF</a>
     </div>
 </div>
 {% endblock %}

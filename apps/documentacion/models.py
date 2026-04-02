@@ -50,10 +50,14 @@ class DocumentoTecnico(models.Model):
         if self.archivo and not self.archivo.name.lower().endswith(".pdf"):
             raise ValidationError({"archivo": "Solo se permiten archivos PDF."})
         if self.tipo_documento == self.TipoDocumento.PROCEDIMIENTO:
-            if not self.formulacion:
-                raise ValidationError({"formulacion": "El procedimiento debe asociarse a una formulación."})
-            if self.materia_prima:
-                raise ValidationError({"materia_prima": "Una materia prima no puede tener procedimiento asociado."})
+            if not self.formulacion and not self.materia_prima:
+                raise ValidationError(
+                    {"formulacion": "El procedimiento debe asociarse a una formulación o a una materia prima."}
+                )
+            if self.formulacion and self.materia_prima:
+                raise ValidationError(
+                    {"materia_prima": "Asocia el procedimiento solo a una formulación o a una materia prima."}
+                )
         if self.tipo_documento == self.TipoDocumento.FICHA_TECNICA:
             if not self.formulacion and not self.materia_prima:
                 raise ValidationError(

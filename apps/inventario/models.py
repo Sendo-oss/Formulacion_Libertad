@@ -17,6 +17,7 @@ class MateriaPrima(models.Model):
     fecha_elaboracion = models.DateField(null=True, blank=True)
     fecha_vencimiento = models.DateField(null=True, blank=True)
     requiere_control_caducidad = models.BooleanField(default=True)
+    dias_alerta_vencimiento = models.PositiveIntegerField(default=30)
     casa_comercial = models.CharField(max_length=150, blank=True)
     stock_actual = models.DecimalField(max_digits=10, decimal_places=2)
     stock_minimo = models.DecimalField(max_digits=10, decimal_places=2)
@@ -82,6 +83,8 @@ class MateriaPrima(models.Model):
             raise ValidationError({"stock_actual": "El stock actual no puede ser negativo."})
         if self.stock_minimo < 0:
             raise ValidationError({"stock_minimo": "El stock minimo no puede ser negativo."})
+        if self.dias_alerta_vencimiento < 0:
+            raise ValidationError({"dias_alerta_vencimiento": "Los dias de anticipacion no pueden ser negativos."})
 
     def save(self, *args, **kwargs):
         self.actualizar_estado_por_vencimiento()
