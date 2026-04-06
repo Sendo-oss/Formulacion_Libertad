@@ -106,9 +106,9 @@ class DocumentoTecnicoCreateView(LoginRequiredMixin, PuedeGestionarDocumentacion
         response = super().form_valid(form)
         registrar_historial(
             self.request.user,
-            "Documentacion tecnica",
+            "Documentación técnica",
             "Carga de documento",
-            f"Se subio el documento '{self.object.titulo}'.",
+            f"Se subió el documento '{self.object.titulo}'.",
             entidad=self.object.titulo,
         )
         return response
@@ -124,9 +124,9 @@ class DocumentoTecnicoUpdateView(LoginRequiredMixin, PuedeGestionarDocumentacion
         response = super().form_valid(form)
         registrar_historial(
             self.request.user,
-            "Documentacion tecnica",
-            "Actualizacion de documento",
-            f"Se actualizo el documento '{self.object.titulo}'.",
+            "Documentación técnica",
+            "Actualización de documento",
+            f"Se actualizó el documento '{self.object.titulo}'.",
             entidad=self.object.titulo,
         )
         return response
@@ -142,9 +142,9 @@ class DocumentoTecnicoDeleteView(LoginRequiredMixin, PuedeGestionarDocumentacion
         documento.delete()
         registrar_historial(
             request.user,
-            "Documentacion tecnica",
-            "Eliminacion de documento",
-            f"Se elimino el documento '{titulo}'.",
+            "Documentación técnica",
+            "Eliminación de documento",
+            f"Se eliminó el documento '{titulo}'.",
             entidad=titulo,
         )
         messages.success(request, "El documento fue eliminado correctamente.")

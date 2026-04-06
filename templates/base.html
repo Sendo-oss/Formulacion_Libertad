@@ -315,8 +315,8 @@
                 <span class="brand-lockup">
                     <span class="brand-logo-wrap">
                         <img
-                            src="{% static 'img/logo-istul.png' %}"
-                            alt="ISTUL"
+                            src="{% static 'img/Libertad.png' %}?v=20260406a"
+                            alt="Instituto Libertad"
                             class="brand-logo"
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                         >
@@ -335,8 +335,8 @@
                         <a class="nav-link {% if '/alertas/' in request.path %}nav-current{% endif %}" href="{% url 'alertas:lista' %}">Alertas</a>
                     {% endif %}
                     {% if request.user.rol == "ADMINISTRADOR" %}
-                        <a class="nav-link {% if '/usuarios/' in request.path %}nav-current{% endif %}" href="{% url 'usuarios:lista' %}">Usuarios</a>
-                        <a class="nav-link {% if '/usuarios/historial/' in request.path %}nav-current{% endif %}" href="{% url 'usuarios:historial' %}">Historial</a>
+                        <a class="nav-link {% if request.resolver_match.namespace == 'usuarios' and request.resolver_match.url_name != 'historial' %}nav-current{% endif %}" href="{% url 'usuarios:lista' %}">Usuarios</a>
+                        <a class="nav-link {% if request.resolver_match.namespace == 'usuarios' and request.resolver_match.url_name == 'historial' %}nav-current{% endif %}" href="{% url 'usuarios:historial' %}">Historial</a>
                     {% endif %}
                 </div>
                 <div class="ms-auto user-panel">

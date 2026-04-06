@@ -9,10 +9,10 @@ class UsuarioAdmin(UserAdmin):
     list_display = ("username", "first_name", "last_name", "email", "rol", "is_active")
     list_filter = ("rol", "is_active", "is_staff")
     fieldsets = UserAdmin.fieldsets + (
-        ("Informacion institucional", {"fields": ("rol", "debe_cambiar_contrasena")}),
+        ("Información institucional", {"fields": ("rol", "debe_cambiar_contrasena")}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ("Informacion institucional", {"fields": ("rol", "debe_cambiar_contrasena")}),
+        ("Información institucional", {"fields": ("rol", "debe_cambiar_contrasena")}),
     )
 
 
