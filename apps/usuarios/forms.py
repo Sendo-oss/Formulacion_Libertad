@@ -228,6 +228,11 @@ class CambioContrasenaObligatorioForm(forms.Form):
 
 
 class LoginForm(AuthenticationForm):
+    error_messages = {
+        "invalid_login": "Usuario no existe o la contraseña es incorrecta.",
+        "inactive": "Esta cuenta está inactiva. Contacta al administrador.",
+    }
+
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={

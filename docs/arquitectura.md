@@ -1,4 +1,6 @@
 <<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 # Arquitectura Propuesta
 
 ## Enfoque general
@@ -119,6 +121,10 @@ Reglas recomendadas:
 - registrar usuario creador y fechas de auditoria
 
 =======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 # Arquitectura funcional propuesta
 
 ## 1. Módulos
@@ -205,4 +211,10 @@ Para permitir nuevas formulaciones sin modificar código:
 - Modelar formulaciones de forma parametrizable (datos en BD, no hardcodeados).
 - Usar tabla detalle para ingredientes y cantidades dinámicas.
 - Evitar lógica acoplada a códigos fijos de formulación.
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
 >>>>>>> theirs

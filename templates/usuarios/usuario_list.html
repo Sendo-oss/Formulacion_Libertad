@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="page-header mb-3">
     <h1 class="h3 mb-0">Usuarios</h1>
-    <div class="d-flex gap-2">
+    <div class="page-actions">
         <a class="btn btn-outline-secondary" href="{% url 'usuarios:historial' %}">Ver historial</a>
         <a class="btn btn-outline-primary" href="{% url 'usuarios:recuperaciones' %}">
             Solicitudes de recuperación
@@ -23,8 +23,8 @@
 {% endif %}
 
 <div class="card shadow-sm">
-    <div class="table-responsive">
-        <table class="table table-hover mb-0">
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-hover mb-0 table-mobile-wide">
             <thead>
                 <tr>
                     <th>Usuario</th>
@@ -62,6 +62,46 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="card-body d-md-none p-3">
+        {% for usuario in usuarios %}
+            <div class="mobile-record-card p-3 {% if not forloop.last %}mb-3{% endif %}">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <div>
+                        <div class="mobile-record-title">{{ usuario.get_full_name }}</div>
+                        <div class="text-secondary small mt-1">@{{ usuario.username }}</div>
+                    </div>
+                    {% if usuario.debe_cambiar_contrasena %}
+                        <span class="badge text-bg-warning">Cambio pendiente</span>
+                    {% else %}
+                        <span class="badge text-bg-success">Normal</span>
+                    {% endif %}
+                </div>
+                <div class="mobile-record-grid mb-3">
+                    <div>
+                        <span class="mobile-record-label">Correo</span>
+                        <div>{{ usuario.email }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Rol</span>
+                        <div>{{ usuario.get_rol_display }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Estado</span>
+                        <div>{{ usuario.is_active|yesno:"Activo,Inactivo" }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Último acceso</span>
+                        <div>{{ usuario.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</div>
+                    </div>
+                </div>
+                <div class="mobile-record-actions">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'usuarios:editar' usuario.pk %}">Editar</a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="mb-0">No hay usuarios registrados.</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

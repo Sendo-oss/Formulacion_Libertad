@@ -129,6 +129,71 @@
             background: var(--surface);
             box-shadow: 0 18px 45px rgba(11, 45, 67, 0.08);
         }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .page-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 0 0 1rem 1rem;
+        }
+        .table-mobile-wide {
+            min-width: 720px;
+        }
+        .mobile-record-card {
+            border: 1px solid rgba(14, 58, 90, 0.1);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 10px 24px rgba(11, 45, 67, 0.06);
+        }
+        .mobile-record-title {
+            color: var(--brand-dark);
+            font-weight: 800;
+        }
+        .mobile-record-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+        .mobile-record-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #627786;
+            margin-bottom: 0.2rem;
+        }
+        .mobile-record-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+        .detail-grid dt {
+            color: #5c7383;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.78rem;
+        }
+        .detail-grid dd {
+            margin-bottom: 0.9rem;
+        }
+        .form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
         .metric-value {
             font-size: 2.5rem;
             font-weight: 700;
@@ -274,6 +339,29 @@
             margin-left: auto;
             text-align: right;
         }
+        .site-footer {
+            margin-top: 2rem;
+            padding: 1.25rem 0 2rem;
+            border-top: 1px solid rgba(14, 58, 90, 0.12);
+            color: #4f6472;
+            font-size: 0.95rem;
+        }
+        .site-footer a {
+            color: var(--brand);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .site-footer a:hover,
+        .site-footer a:focus {
+            color: var(--brand-dark);
+            text-decoration: underline;
+        }
+        .mobile-app-nav {
+            display: none;
+        }
+        .mobile-user-chip {
+            display: none;
+        }
         @media (max-width: 1399.98px) {
             .main-nav {
                 flex: 1 1 100%;
@@ -298,6 +386,251 @@
                 border-radius: 1rem;
                 justify-content: space-between;
             }
+            .page-actions {
+                width: 100%;
+            }
+            .page-actions .btn,
+            .page-actions a.btn {
+                flex: 1 1 calc(50% - 0.75rem);
+            }
+            .metric-value {
+                font-size: 2.1rem;
+            }
+        }
+        @media (max-width: 767.98px) {
+            body {
+                background:
+                    radial-gradient(circle at top left, rgba(217, 177, 95, 0.2), transparent 26%),
+                    linear-gradient(180deg, #eef4f8 0%, #f8fbfd 38%, #edf3f8 100%);
+                padding-top: 4.75rem;
+            }
+            .site-shell::before {
+                background:
+                    linear-gradient(140deg, rgba(14, 58, 90, 0.04), transparent 32%),
+                    radial-gradient(circle at right top, rgba(217, 177, 95, 0.14), transparent 22%);
+            }
+            .topbar {
+                display: none;
+            }
+            .navbar {
+                display: none;
+            }
+            .hero-card .card-body,
+            .panel-card .card-body {
+                padding: 1.15rem !important;
+            }
+            .hero-card,
+            .panel-card {
+                border-radius: 1.1rem;
+                background: rgba(255, 255, 255, 0.94);
+                box-shadow: 0 14px 34px rgba(11, 45, 67, 0.1);
+            }
+            .page-header {
+                gap: 0.75rem;
+            }
+            .page-header h1,
+            .page-header .h3 {
+                font-size: 1.45rem;
+            }
+            .page-header p {
+                font-size: 0.95rem;
+            }
+            .page-actions .btn,
+            .page-actions a.btn {
+                flex: 1 1 100%;
+                min-height: 48px;
+                border-radius: 0.95rem;
+                font-weight: 700;
+            }
+            .site-footer {
+                font-size: 0.88rem;
+                padding: 1rem 0 1.5rem;
+            }
+            main.container {
+                padding-bottom: 1rem !important;
+            }
+            body {
+                padding-bottom: 5.8rem;
+            }
+            .mobile-user-chip {
+                display: block;
+                position: fixed;
+                top: 0.75rem;
+                left: 0.8rem;
+                right: 0.8rem;
+                z-index: 1040;
+            }
+            .mobile-user-chip__inner {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.72rem 0.95rem;
+                border-radius: 1.1rem;
+                background: rgba(8, 39, 57, 0.95);
+                color: #fff;
+                box-shadow: 0 16px 34px rgba(8, 39, 57, 0.22);
+                backdrop-filter: blur(14px);
+            }
+            .mobile-user-chip__logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 52px;
+                min-height: 40px;
+                padding: 0.3rem 0.5rem;
+                border-radius: 0.9rem;
+                background: rgba(255, 255, 255, 0.96);
+            }
+            .mobile-user-chip__logo img {
+                height: 24px;
+                width: auto;
+                display: block;
+            }
+            .mobile-user-chip__meta {
+                min-width: 0;
+                flex: 1 1 auto;
+            }
+            .mobile-user-chip__name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-weight: 700;
+                font-size: 0.95rem;
+                line-height: 1.15;
+            }
+            .mobile-user-chip__role {
+                display: inline-flex;
+                margin-top: 0.25rem;
+                padding: 0.18rem 0.55rem;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.12);
+                color: rgba(255, 255, 255, 0.88);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+            }
+            .table-responsive {
+                margin-inline: -0.1rem;
+            }
+            .mobile-record-grid {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+            .mobile-record-card {
+                border-radius: 1.15rem;
+                padding: 1rem !important;
+                background:
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 253, 0.95));
+                box-shadow: 0 12px 28px rgba(11, 45, 67, 0.08);
+            }
+            .mobile-record-title {
+                font-size: 1.03rem;
+                letter-spacing: -0.02em;
+            }
+            .mobile-record-label {
+                font-size: 0.68rem;
+                letter-spacing: 0.1em;
+                color: #6e8391;
+            }
+            .mobile-record-actions .btn,
+            .mobile-record-actions a {
+                flex: 1 1 100%;
+                text-align: center;
+                min-height: 46px;
+                border-radius: 0.9rem;
+                font-weight: 700;
+            }
+            .detail-grid dt,
+            .detail-grid dd {
+                width: 100%;
+                max-width: 100%;
+                flex: 0 0 100%;
+            }
+            .detail-grid dd {
+                margin-bottom: 1rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px dashed rgba(14, 58, 90, 0.1);
+            }
+            .detail-grid dd:last-child {
+                border-bottom: 0;
+                padding-bottom: 0;
+            }
+            .form-actions .btn,
+            .form-actions a,
+            .form-actions form {
+                flex: 1 1 100%;
+            }
+            .form-actions form .btn {
+                width: 100%;
+            }
+            .form-control,
+            .form-select,
+            .input-group-text {
+                min-height: 50px;
+                border-radius: 0.95rem;
+            }
+            .alert {
+                border-radius: 1rem;
+                box-shadow: 0 10px 24px rgba(11, 45, 67, 0.06);
+            }
+            .mobile-app-nav {
+                display: block;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1040;
+                padding: 0.65rem 0.8rem calc(0.65rem + env(safe-area-inset-bottom));
+                pointer-events: none;
+            }
+            .mobile-app-nav__inner {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.55rem;
+                padding: 0.6rem;
+                border-radius: 1.35rem;
+                background: rgba(8, 39, 57, 0.96);
+                box-shadow: 0 18px 38px rgba(8, 39, 57, 0.28);
+                backdrop-filter: blur(14px);
+                pointer-events: auto;
+            }
+            .mobile-app-nav__link {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.38rem;
+                min-height: 56px;
+                padding: 0.55rem 0.25rem;
+                border-radius: 1rem;
+                color: rgba(255, 255, 255, 0.74);
+                text-decoration: none;
+                font-size: 0.68rem;
+                font-weight: 700;
+                letter-spacing: 0.03em;
+                transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            }
+            .mobile-app-nav__link svg {
+                width: 19px;
+                height: 19px;
+                display: block;
+            }
+            .mobile-app-nav__link.is-active {
+                color: #fff;
+                background: linear-gradient(135deg, rgba(217, 177, 95, 0.95), rgba(188, 145, 55, 0.96));
+                box-shadow: 0 10px 18px rgba(4, 18, 28, 0.22);
+                transform: translateY(-1px);
+            }
+            .mobile-app-nav__link:active {
+                transform: scale(0.98);
+            }
+            .mobile-app-nav__button {
+                border: 0;
+                background: transparent;
+                width: 100%;
+                cursor: pointer;
+            }
         }
     </style>
 </head>
@@ -315,7 +648,7 @@
                 <span class="brand-lockup">
                     <span class="brand-logo-wrap">
                         <img
-                            src="{% static 'img/Libertad.png' %}?v=20260406a"
+                            src="{% static 'img/logo-istul.png' %}?v=20260407a"
                             alt="Instituto Libertad"
                             class="brand-logo"
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
@@ -360,6 +693,128 @@
         {% endif %}
         {% block content %}{% endblock %}
     </main>
+    <footer class="site-footer">
+        <div class="container text-center">
+            Desarrollado por Michael Buitrón
+            <br>
+            📧 <a href="mailto:michusty07@gmail.com">michusty07@gmail.com</a>
+        </div>
+    </footer>
+    {% if request.user.is_authenticated %}
+    <div class="mobile-user-chip d-md-none" aria-label="Usuario actual">
+        <div class="mobile-user-chip__inner">
+            <div class="mobile-user-chip__logo">
+                <img src="{% static 'img/logo-istul.png' %}?v=20260407a" alt="ISTUL">
+            </div>
+            <div class="mobile-user-chip__meta">
+                <div class="mobile-user-chip__name">@{{ request.user.username }}</div>
+                <div class="mobile-user-chip__role">{{ request.user.get_rol_display }}</div>
+            </div>
+        </div>
+    </div>
+    <nav class="mobile-app-nav d-md-none" aria-label="Navegacion movil">
+        <div class="mobile-app-nav__inner">
+            <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'dashboard' %}is-active{% endif %}" href="{% url 'dashboard:inicio' %}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.75v-5.5h-4.5V21H5a1 1 0 0 1-1-1v-9.5Z" fill="currentColor"/>
+                </svg>
+                <span>Inicio</span>
+            </a>
+            <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'inventario' %}is-active{% endif %}" href="{% url 'inventario:lista' %}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7.5 12 4l8 3.5v9L12 20l-8-3.5v-9Z" fill="currentColor"/>
+                    <path d="M4 7.5 12 11l8-3.5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>
+                </svg>
+                <span>Insumos</span>
+            </a>
+            <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'formulaciones' %}is-active{% endif %}" href="{% url 'formulaciones:lista' %}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 4h8v4.2l3.8 6.39A3 3 0 0 1 16.21 19H7.79A3 3 0 0 1 5.2 14.59L9 8.2V4Z" fill="currentColor"/>
+                </svg>
+                <span>Formulas</span>
+            </a>
+            {% if request.user.rol == "ADMINISTRADOR" %}
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'alertas' %}is-active{% endif %}" href="{% url 'alertas:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 4 4 18h16L12 4Z" fill="currentColor"/>
+                        <path d="M12 9v4" stroke="rgba(255,255,255,0.5)" stroke-width="1.4" stroke-linecap="round"/>
+                        <circle cx="12" cy="15.8" r="0.9" fill="rgba(255,255,255,0.6)"/>
+                    </svg>
+                    <span>Alertas</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'usuarios' %}is-active{% endif %}" href="{% url 'usuarios:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.33 0-6 1.79-6 4v1h12v-1c0-2.21-2.67-4-6-4Z" fill="currentColor"/>
+                    </svg>
+                    <span>Usuarios</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'calculadora' %}is-active{% endif %}" href="{% url 'calculadora:inicio' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M8.5 7.5h7M8.5 11h2m3 0h2m-7 3h2m3 0h2" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Calcular</span>
+                </a>
+            {% elif request.user.rol == "ESTUDIANTE" %}
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'documentacion' %}is-active{% endif %}" href="{% url 'documentacion:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M14 3v5h5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Docs</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'noticias' %}is-active{% endif %}" href="{% url 'noticias:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5 6h14v12H5z" fill="currentColor"/>
+                        <path d="M8 10h8M8 13h8M8 16h5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Noticias</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'calculadora' %}is-active{% endif %}" href="{% url 'calculadora:inicio' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M8.5 7.5h7M8.5 11h2m3 0h2m-7 3h2m3 0h2" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Calcular</span>
+                </a>
+            {% else %}
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'alertas' %}is-active{% endif %}" href="{% url 'alertas:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 4 4 18h16L12 4Z" fill="currentColor"/>
+                        <path d="M12 9v4" stroke="rgba(255,255,255,0.5)" stroke-width="1.4" stroke-linecap="round"/>
+                        <circle cx="12" cy="15.8" r="0.9" fill="rgba(255,255,255,0.6)"/>
+                    </svg>
+                    <span>Alertas</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'documentacion' %}is-active{% endif %}" href="{% url 'documentacion:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M14 3v5h5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Docs</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'calculadora' %}is-active{% endif %}" href="{% url 'calculadora:inicio' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M8.5 7.5h7M8.5 11h2m3 0h2m-7 3h2m3 0h2" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Calcular</span>
+                </a>
+            {% endif %}
+            <form method="post" action="{% url 'logout' %}" class="m-0">
+                {% csrf_token %}
+                <button class="mobile-app-nav__link mobile-app-nav__button" type="submit">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M10 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M13 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    <span>Salir</span>
+                </button>
+            </form>
+        </div>
+    </nav>
+    {% endif %}
     </div>
 </body>
 </html>

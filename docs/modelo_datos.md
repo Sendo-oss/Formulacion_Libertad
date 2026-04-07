@@ -1,4 +1,6 @@
 <<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 # Modelo de Datos
 
 ## Entidades principales
@@ -257,6 +259,10 @@ class Alerta(models.Model):
 ```
 
 =======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 # Modelo de datos (ER lógico)
 
 ## Entidades principales
@@ -321,4 +327,10 @@ class Alerta(models.Model):
 - Índices en `tipo_alerta`, `estado`, `fecha_generacion` en alertas.
 - `stock_actual` y `stock_minimo` con validación >= 0.
 - Restricción de unicidad para `codigo` en formulaciones.
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
 >>>>>>> theirs

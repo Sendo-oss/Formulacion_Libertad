@@ -1,4 +1,6 @@
 <<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 # Sistema Web de Formulacion Magistral
 
 Base funcional y tecnica de un sistema web de gestion de formulaciones magistrales en un laboratorio academico de farmacia.
@@ -91,6 +93,10 @@ formulacion_libertad/
 
 El entorno actual no tiene Django instalado, por eso no se generaron migraciones reales en esta sesion. La estructura y los archivos quedaron listos para ejecutar esos pasos apenas instales dependencias.
 =======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 # Sistema web de formulaciones magistrales (Diseño base)
 
 Este repositorio contiene una propuesta de diseño técnico y de datos para un sistema web de gestión de formulaciones magistrales en un laboratorio académico de farmacia.
@@ -107,9 +113,23 @@ Centralizar la gestión de materias primas y formulaciones, habilitar control po
 1. Diseño funcional y de arquitectura: `docs/arquitectura.md`
 2. Modelo de datos y relaciones: `docs/modelo_datos.md`
 3. Ejemplo de implementación inicial en Django: `backend/laboratorio/models.py`
+<<<<<<< ours
+<<<<<<< ours
+=======
+4. Guía de puesta en marcha y troubleshooting: `docs/puesta_en_marcha.md`
+>>>>>>> theirs
+=======
+4. Guía de puesta en marcha y troubleshooting: `docs/puesta_en_marcha.md`
+>>>>>>> theirs
 
 ## Roles del sistema
 - **Administrador:** control total (CRUD de usuarios, materias primas, formulaciones, alertas).
 - **Profesor:** registra/edita formulaciones, consulta materias primas, revisa alertas.
 - **Estudiante:** consulta información en modo solo lectura.
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
 >>>>>>> theirs

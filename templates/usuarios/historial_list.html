@@ -3,7 +3,7 @@
 {% block title %}Historial del sistema{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="page-header mb-3">
     <div>
         <h1 class="h3 mb-1">Historial del sistema</h1>
         <p class="text-secondary mb-0">Registro de acciones relevantes realizado por los usuarios dentro de la plataforma.</p>
@@ -12,8 +12,8 @@
 </div>
 
 <div class="panel-card card">
-    <div class="table-responsive">
-        <table class="table table-hover mb-0 align-middle">
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-hover mb-0 align-middle table-mobile-wide">
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -41,6 +41,37 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="card-body d-md-none p-3">
+        {% for registro in registros %}
+            <div class="mobile-record-card p-3 {% if not forloop.last %}mb-3{% endif %}">
+                <div class="mobile-record-title mb-2">{{ registro.accion }}</div>
+                <div class="mobile-record-grid">
+                    <div>
+                        <span class="mobile-record-label">Fecha</span>
+                        <div>{{ registro.fecha|date:"d/m/Y H:i" }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Usuario</span>
+                        <div>{{ registro.usuario.get_full_name|default:registro.usuario.username|default:"Sistema" }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Módulo</span>
+                        <div>{{ registro.modulo }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Entidad</span>
+                        <div>{{ registro.entidad|default:"-" }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Descripción</span>
+                        <div>{{ registro.descripcion }}</div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="mb-0 text-secondary">No hay registros en el historial.</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

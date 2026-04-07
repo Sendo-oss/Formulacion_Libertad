@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="page-header mb-3">
     <h1 class="h3 mb-0">Alertas</h1>
-    <div class="d-flex gap-2">
+    <div class="page-actions">
         <a class="btn btn-outline-danger" href="?prioridad={{ request.GET.prioridad|default:'' }}&estado={{ request.GET.estado|default:'' }}&export=pdf">Exportar PDF</a>
         <a class="btn btn-outline-success" href="?prioridad={{ request.GET.prioridad|default:'' }}&estado={{ request.GET.estado|default:'' }}&export=excel">Exportar Excel</a>
     </div>
@@ -34,8 +34,8 @@
 </form>
 
 <div class="panel-card card">
-    <div class="table-responsive">
-        <table class="table table-hover mb-0">
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-hover mb-0 table-mobile-wide">
             <thead>
                 <tr>
                     <th>Tipo</th>
@@ -69,6 +69,37 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="card-body d-md-none p-3">
+        {% for alerta in alertas %}
+            <div class="mobile-record-card p-3 {% if not forloop.last %}mb-3{% endif %}">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <div class="mobile-record-title">{{ alerta.get_tipo_alerta_display }}</div>
+                    <span class="badge {% if alerta.prioridad == 'CRITICA' %}text-bg-danger{% elif alerta.prioridad == 'ALTA' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
+                        {{ alerta.get_prioridad_display }}
+                    </span>
+                </div>
+                <div class="mobile-record-grid mb-3">
+                    <div>
+                        <span class="mobile-record-label">Materia prima</span>
+                        <div>{{ alerta.materia_prima.nombre }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Estado</span>
+                        <div>{{ alerta.get_estado_display }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Fecha</span>
+                        <div>{{ alerta.fecha_generacion }}</div>
+                    </div>
+                </div>
+                <div class="mobile-record-actions">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'alertas:detalle' alerta.pk %}">Ver detalle</a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="mb-0">No hay alertas registradas.</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

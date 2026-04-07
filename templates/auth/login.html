@@ -135,14 +135,76 @@
         font-weight: 700;
         letter-spacing: 0.01em;
     }
+    .login-alert {
+        border: 1px solid rgba(163, 29, 45, 0.18);
+        border-radius: 1rem;
+        background: linear-gradient(180deg, rgba(255, 239, 241, 0.96), rgba(255, 247, 248, 0.98));
+        color: #7a1f2d;
+        box-shadow: 0 10px 24px rgba(122, 31, 45, 0.08);
+    }
+    .field-error {
+        margin-top: 0.55rem;
+        color: #a61e32;
+        font-size: 0.92rem;
+        font-weight: 600;
+    }
     .login-visual {
         min-height: 700px;
         background:
             linear-gradient(180deg, rgba(8, 39, 57, 0.24), rgba(8, 39, 57, 0.52)),
-            url('{% static "img/Libertad.png" %}?v=20260320c') 12% center / cover no-repeat;
+            url('{% static "img/Libertad.png" %}?v=20260407b') 12% center / cover no-repeat;
+    }
+    @media (max-width: 991.98px) {
+        .login-shell {
+            padding: 1.45rem;
+            border-radius: 1.25rem;
+        }
+    }
+    @media (max-width: 767.98px) {
+        .login-side {
+            background:
+                radial-gradient(circle at top right, rgba(217, 177, 95, 0.28), transparent 34%),
+                linear-gradient(180deg, rgba(250, 252, 254, 0.98), rgba(240, 246, 250, 0.98));
+        }
+        .login-shell::before {
+            inset: auto -55px -60px auto;
+            width: 150px;
+            height: 150px;
+        }
+        .login-shell {
+            padding: 1.2rem;
+            border-radius: 1.35rem;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 252, 254, 0.94));
+            box-shadow: 0 18px 36px rgba(12, 46, 68, 0.12);
+        }
+        .login-kicker {
+            font-size: 0.88rem;
+            padding: 0.45rem 0.85rem;
+        }
+        .login-note {
+            padding: 0.9rem 1rem;
+            border-radius: 1.1rem;
+        }
+        .login-submit {
+            min-height: 50px;
+            border-radius: 0.95rem;
+        }
+        .input-shell {
+            min-height: 54px;
+            padding: 0 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 22px rgba(11, 45, 67, 0.06);
+        }
+        .login-alert {
+            border-radius: 1rem;
+        }
+        .section-title.display-6 {
+            font-size: 1.8rem;
+            line-height: 1.05;
+        }
     }
 </style>
-<div class="panel-card card overflow-hidden" style="min-height: 72vh;">
+<div class="panel-card card overflow-hidden" style="min-height: min(72vh, 980px);">
     <div class="row g-0 h-100">
         <div class="col-lg-8 d-none d-lg-block">
             <div class="h-100 position-relative login-visual">
@@ -170,6 +232,13 @@
                         </div>
                         <form method="post" autocomplete="off">
                             {% csrf_token %}
+                            {% if form.non_field_errors %}
+                                <div class="alert login-alert mb-4" role="alert">
+                                    {% for error in form.non_field_errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                             <div class="mb-3">
                                 <label class="form-label fw-semibold" for="{{ form.username.id_for_label }}">Usuario</label>
                                 <div class="input-shell">
@@ -178,6 +247,9 @@
                                     </svg>
                                     {{ form.username }}
                                 </div>
+                                {% for error in form.username.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                             <div class="mb-4">
                                 <label class="form-label fw-semibold" for="{{ form.password.id_for_label }}">Contraseña</label>
@@ -187,6 +259,9 @@
                                     </svg>
                                     {{ form.password }}
                                 </div>
+                                {% for error in form.password.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                             <div class="d-flex justify-content-end mb-4">
                                 <a href="{% url 'usuarios:recuperacion_solicitar' %}" class="text-decoration-none fw-semibold" style="color: var(--brand);">Olvidé mi contraseña</a>
