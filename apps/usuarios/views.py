@@ -27,6 +27,10 @@ class UsuarioListView(LoginRequiredMixin, SoloAdministradorMixin, ListView):
     model = Usuario
     template_name = "usuarios/usuario_list.html"
     context_object_name = "usuarios"
+    paginate_by = 12
+
+    def get_queryset(self):
+        return super().get_queryset().order_by("username")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -111,12 +115,14 @@ class SolicitudRecuperacionListView(LoginRequiredMixin, SoloAdministradorMixin, 
     model = SolicitudRecuperacionContrasena
     template_name = "usuarios/solicitud_recuperacion_list.html"
     context_object_name = "solicitudes"
+    paginate_by = 12
 
 
 class HistorialSistemaListView(LoginRequiredMixin, SoloAdministradorMixin, ListView):
     model = HistorialSistema
     template_name = "usuarios/historial_list.html"
     context_object_name = "registros"
+    paginate_by = 15
 
 
 class SolicitudRecuperacionUpdateView(LoginRequiredMixin, SoloAdministradorMixin, UpdateView):

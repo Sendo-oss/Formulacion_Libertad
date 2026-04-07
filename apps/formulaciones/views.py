@@ -42,6 +42,7 @@ class FormulacionListView(LoginRequiredMixin, ListView):
     model = Formulacion
     template_name = "formulaciones/formulacion_list.html"
     context_object_name = "formulaciones"
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = super().get_queryset()

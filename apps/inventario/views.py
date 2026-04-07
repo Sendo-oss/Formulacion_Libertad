@@ -39,6 +39,7 @@ class MateriaPrimaListView(LoginRequiredMixin, ListView):
     model = MateriaPrima
     template_name = "inventario/materiaprima_list.html"
     context_object_name = "materias_primas"
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = super().get_queryset()

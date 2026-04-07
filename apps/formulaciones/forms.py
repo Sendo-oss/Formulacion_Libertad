@@ -64,7 +64,7 @@ class FormulacionForm(forms.ModelForm):
 
     class Meta:
         model = Formulacion
-        exclude = ("creado_por",)
+        exclude = ("creado_por", "materias_primas")
         widgets = {
             "descripcion": forms.Textarea(attrs={"rows": 3}),
             "observaciones": forms.Textarea(attrs={"rows": 3}),

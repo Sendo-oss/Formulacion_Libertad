@@ -25,6 +25,7 @@ class AlertaListView(LoginRequiredMixin, PuedeVerAlertasMixin, ListView):
     model = Alerta
     template_name = "alertas/alerta_list.html"
     context_object_name = "alertas"
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = super().get_queryset()

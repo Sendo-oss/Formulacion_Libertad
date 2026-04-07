@@ -36,6 +36,7 @@ class DocumentoTecnicoListView(LoginRequiredMixin, ListView):
     model = DocumentoTecnico
     template_name = "documentacion/documento_list.html"
     context_object_name = "documentos"
+    paginate_by = 12
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related("subido_por", "formulacion", "materia_prima")

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load querystring_tags %}
 
 {% block title %}Documentación técnica{% endblock %}
 
@@ -219,4 +220,5 @@
         {% endfor %}
     </div>
 </div>
+{% include "includes/pagination.html" %}
 {% endblock %}

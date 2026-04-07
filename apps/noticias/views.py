@@ -36,6 +36,7 @@ class NoticiaListView(LoginRequiredMixin, ListView):
     model = Noticia
     template_name = "noticias/noticia_list.html"
     context_object_name = "noticias"
+    paginate_by = 9
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related("creada_por")

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load querystring_tags %}
 
 {% block title %}Noticias{% endblock %}
 
@@ -59,4 +60,5 @@
         </div>
     {% endfor %}
 </div>
+{% include "includes/pagination.html" %}
 {% endblock %}

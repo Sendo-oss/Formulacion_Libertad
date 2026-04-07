@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
+from django.views.defaults import page_not_found, permission_denied, server_error
 
 from apps.usuarios.forms import LoginForm
 
@@ -25,3 +26,7 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler403 = permission_denied
+handler404 = page_not_found
+handler500 = server_error
