@@ -84,16 +84,26 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": get_env("DB_NAME", "formulacion_magistral_db"),
-        "USER": get_env("DB_USER", "postgres"),
-        "PASSWORD": get_env("DB_PASSWORD", "intesud"),
-        "HOST": get_env("DB_HOST", "127.0.0.1"),
-        "PORT": get_env("DB_PORT", "5432"),
+DB_ENGINE = get_env("DB_ENGINE", "postgresql").lower()
+
+if DB_ENGINE == "sqlite":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / get_env("SQLITE_NAME", "db.sqlite3"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": get_env("DB_NAME", "formulacion_magistral_db"),
+            "USER": get_env("DB_USER", "postgres"),
+            "PASSWORD": get_env("DB_PASSWORD", "intesud"),
+            "HOST": get_env("DB_HOST", "127.0.0.1"),
+            "PORT": get_env("DB_PORT", "5432"),
+        }
+    }
 
 AUTH_USER_MODEL = "usuarios.Usuario"
 

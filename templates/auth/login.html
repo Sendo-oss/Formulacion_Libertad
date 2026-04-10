@@ -5,6 +5,19 @@
 
 {% block content %}
 <style>
+    .topbar,
+    .navbar,
+    .site-footer {  
+        display: none !important;
+    }
+    body {
+        min-height: 100vh;
+    }
+    main.container.pb-4 {
+        max-width: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
     @keyframes loginRise {
         from {
             opacity: 0;
@@ -66,6 +79,50 @@
         display: block;
         color: var(--brand-dark);
         margin-bottom: 0.35rem;
+    }
+    .login-visual h1,
+    .login-shell h2 {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+    }
+    .login-visual::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(180deg, rgba(4, 22, 34, 0.06), rgba(4, 22, 34, 0.42)),
+            radial-gradient(circle at 18% 22%, rgba(217, 177, 95, 0.18), transparent 24%);
+    }
+    .login-visual-copy {
+        position: relative;
+        z-index: 1;
+        max-width: 560px;
+    }
+    .login-visual-copy .badge {
+        backdrop-filter: blur(8px);
+        box-shadow: 0 10px 24px rgba(5, 18, 28, 0.18);
+    }
+    .login-visual-title {
+        font-size: clamp(2.5rem, 4vw, 3.8rem);
+        line-height: 0.95;
+        text-wrap: balance;
+        text-shadow: 0 18px 34px rgba(4, 18, 28, 0.28);
+    }
+    .login-visual-text {
+        font-size: 1.03rem;
+        line-height: 1.75;
+        color: rgba(255, 255, 255, 0.92);
+        text-shadow: 0 10px 24px rgba(4, 18, 28, 0.2);
+    }
+    .login-title {
+        font-size: clamp(2.1rem, 2.8vw, 3rem);
+        line-height: 0.98;
+        color: var(--brand-dark);
+    }
+    .login-intro {
+        max-width: 28rem;
+        line-height: 1.7;
     }
     .login-brand-mini {
         display: inline-flex;
@@ -149,15 +206,18 @@
         font-weight: 600;
     }
     .login-visual {
-        min-height: 700px;
+        min-height: clamp(520px, calc(100vh - 4rem), 760px);
         background:
             linear-gradient(180deg, rgba(8, 39, 57, 0.24), rgba(8, 39, 57, 0.52)),
-            url('{% static "img/Libertad.png" %}?v=20260407b') 12% center / cover no-repeat;
+            url('{% static "img/Libertad.png" %}?v=20260407d') 12% center / cover no-repeat;
     }
     @media (max-width: 991.98px) {
         .login-shell {
             padding: 1.45rem;
             border-radius: 1.25rem;
+        }
+        .login-visual {
+            min-height: clamp(460px, calc(100vh - 3rem), 620px);
         }
     }
     @media (max-width: 767.98px) {
@@ -172,7 +232,7 @@
             height: 150px;
         }
         .login-shell {
-            padding: 1.2rem;
+            padding: 1.15rem;
             border-radius: 1.35rem;
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 252, 254, 0.94));
             box-shadow: 0 18px 36px rgba(12, 46, 68, 0.12);
@@ -180,6 +240,12 @@
         .login-kicker {
             font-size: 0.88rem;
             padding: 0.45rem 0.85rem;
+        }
+        .login-visual-title {
+            font-size: 2.2rem;
+        }
+        .login-title {
+            font-size: 2rem;
         }
         .login-note {
             padding: 0.9rem 1rem;
@@ -204,16 +270,18 @@
         }
     }
 </style>
-<div class="panel-card card overflow-hidden" style="min-height: min(72vh, 980px);">
+<div class="panel-card card overflow-hidden" style="min-height: min(calc(100vh - 1rem), 860px); border-radius: 0;">
     <div class="row g-0 h-100">
         <div class="col-lg-8 d-none d-lg-block">
             <div class="h-100 position-relative login-visual">
                 <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex flex-column justify-content-end p-5 text-white">
+                    <div class="login-visual-copy">
                     <span class="badge rounded-pill align-self-start mb-3" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.22);">Laboratorio académico</span>
-                    <h1 class="display-6 fw-bold mb-3 text-white">Formulación magistral con identidad institucional</h1>
-                    <p class="mb-0" style="max-width: 420px; color: rgba(255,255,255,0.9);">
+                    <h1 class="login-visual-title mb-3 text-white">Formulación magistral con identidad institucional</h1>
+                    <p class="login-visual-text mb-0">
                         Plataforma para el control de materias primas, formulaciones, alertas y cálculos farmacéuticos del Instituto Libertad.
                     </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -222,8 +290,8 @@
                 <div class="mx-auto login-shell" style="max-width: 560px;">
                     <div class="position-relative">
                         <span class="login-kicker mb-3">Acceso institucional</span>
-                        <h2 class="section-title display-6 mb-2">Acceso al sistema</h2>
-                        <p class="text-secondary fs-5 mb-4">
+                        <h2 class="section-title login-title mb-2">Acceso al sistema</h2>
+                        <p class="text-secondary fs-5 mb-4 login-intro">
                             Ingresa con tu cuenta para continuar con la gestión del laboratorio.
                         </p>
                         <div class="login-note mb-4">

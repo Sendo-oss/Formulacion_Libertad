@@ -1,6 +1,4 @@
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
+
 # Arquitectura Propuesta
 
 ## Enfoque general

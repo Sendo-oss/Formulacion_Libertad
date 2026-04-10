@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand: #0e3a5a;
@@ -26,6 +26,12 @@
             background:
                 radial-gradient(circle at top left, rgba(217, 177, 95, 0.18), transparent 24%),
                 linear-gradient(180deg, #edf3f8 0%, #f7fafc 45%, #eef4f8 100%);
+        }
+        h1, h2, h3, h4, h5, h6,
+        .section-title,
+        .brand-title {
+            font-family: "Playfair Display", serif;
+            font-weight: 700;
         }
         .navbar {
             background: linear-gradient(90deg, rgba(8, 39, 57, 0.98), rgba(14, 58, 90, 0.96));
@@ -327,9 +333,36 @@
         .logout-btn {
             color: rgba(255, 255, 255, 0.92);
             font-weight: 700;
+            position: relative;
+            padding: 0.4rem 0.85rem !important;
+            border-radius: 999px;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
         }
         .logout-btn:hover {
             color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 20px rgba(3, 19, 31, 0.22);
+            transform: translateY(-1px);
+        }
+        .logout-btn:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(217, 177, 95, 0.4);
+        }
+        .logout-btn::after {
+            content: "";
+            position: absolute;
+            inset: auto 0.85rem -0.15rem;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(217, 177, 95, 0), rgba(217, 177, 95, 0.95), rgba(217, 177, 95, 0));
+            transform: scaleX(0.35);
+            opacity: 0;
+            transition: transform 0.22s ease, opacity 0.22s ease;
+        }
+        .logout-btn:hover::after,
+        .logout-btn:focus-visible::after {
+            transform: scaleX(1);
+            opacity: 1;
         }
         .topbar .container {
             gap: 0.75rem;
@@ -355,6 +388,111 @@
         .site-footer a:focus {
             color: var(--brand-dark);
             text-decoration: underline;
+        }
+        .logout-dialog {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem;
+            z-index: 1200;
+        }
+        .logout-dialog.is-open {
+            display: flex;
+        }
+        .logout-dialog__backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(7, 26, 39, 0.58);
+            backdrop-filter: blur(8px);
+            animation: logoutFadeIn 0.24s ease forwards;
+        }
+        .logout-dialog__card {
+            position: relative;
+            width: min(100%, 430px);
+            padding: 1.5rem;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at top right, rgba(217, 177, 95, 0.22), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 252, 0.96));
+            box-shadow: 0 28px 60px rgba(5, 26, 39, 0.3);
+            border: 1px solid rgba(14, 58, 90, 0.1);
+            animation: logoutCardIn 0.32s cubic-bezier(.2, .8, .2, 1) forwards;
+        }
+        .logout-dialog__badge {
+            width: 3.2rem;
+            height: 3.2rem;
+            border-radius: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: #fff;
+            background: linear-gradient(135deg, var(--brand-soft), var(--brand-dark));
+            box-shadow: 0 18px 30px rgba(8, 39, 57, 0.24);
+        }
+        .logout-dialog__title {
+            margin-bottom: 0.55rem;
+            color: var(--brand-dark);
+            font-size: 1.6rem;
+        }
+        .logout-dialog__text {
+            margin-bottom: 1.15rem;
+            color: #4b6271;
+            line-height: 1.65;
+        }
+        .logout-dialog__actions {
+            display: flex;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .logout-dialog__cancel,
+        .logout-dialog__submit {
+            min-width: 158px;
+            border-radius: 999px;
+            font-weight: 800;
+            padding: 0.82rem 1.15rem;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+        .logout-dialog__cancel:hover,
+        .logout-dialog__submit:hover {
+            transform: translateY(-1px);
+        }
+        .logout-dialog__cancel {
+            border: 1px solid rgba(14, 58, 90, 0.12);
+            color: var(--brand);
+            background: rgba(255, 255, 255, 0.92);
+        }
+        .logout-dialog__cancel:hover {
+            box-shadow: 0 12px 24px rgba(12, 40, 59, 0.12);
+        }
+        .logout-dialog__submit {
+            border: none;
+            color: #fff;
+            background: linear-gradient(135deg, var(--brand-soft), var(--brand-dark));
+            box-shadow: 0 16px 28px rgba(8, 39, 57, 0.24);
+        }
+        .logout-dialog__submit:hover {
+            box-shadow: 0 20px 32px rgba(8, 39, 57, 0.32);
+        }
+        @keyframes logoutFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes logoutCardIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.94);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         .mobile-app-nav {
             display: none;
@@ -395,6 +533,13 @@
             }
             .metric-value {
                 font-size: 2.1rem;
+            }
+            .logout-dialog__actions {
+                flex-direction: column;
+            }
+            .logout-dialog__cancel,
+            .logout-dialog__submit {
+                width: 100%;
             }
         }
         @media (max-width: 767.98px) {
@@ -677,10 +822,7 @@
                     <span class="user-meta">
                         <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
                     </span>
-                    <form method="post" action="{% url 'logout' %}" class="d-inline mb-0">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-link logout-btn p-0 text-decoration-none align-baseline">Salir</button>
-                    </form>
+                    <button type="button" class="btn btn-link logout-btn text-decoration-none align-baseline js-open-logout-dialog">Salir</button>
                 </div>
             {% endif %}
         </div>
@@ -801,9 +943,7 @@
                     <span>Calcular</span>
                 </a>
             {% endif %}
-            <form method="post" action="{% url 'logout' %}" class="m-0">
-                {% csrf_token %}
-                <button class="mobile-app-nav__link mobile-app-nav__button" type="submit">
+            <button class="mobile-app-nav__link mobile-app-nav__button js-open-logout-dialog" type="button">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M10 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                         <path d="M13 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -811,10 +951,78 @@
                     </svg>
                     <span>Salir</span>
                 </button>
-            </form>
         </div>
     </nav>
     {% endif %}
+    {% if request.user.is_authenticated %}
+    <div class="logout-dialog" id="logoutDialog" aria-hidden="true">
+        <div class="logout-dialog__backdrop" data-close-logout-dialog></div>
+        <div class="logout-dialog__card" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle">
+            <div class="logout-dialog__badge" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M10 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M13 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 class="logout-dialog__title" id="logoutDialogTitle">¿Seguro que quieres cerrar sesión?</h2>
+            <p class="logout-dialog__text">
+                Vas a salir de tu cuenta actual. Si todavía estás trabajando en algo, asegúrate de haber guardado tus cambios.
+            </p>
+            <div class="logout-dialog__actions">
+                <button type="button" class="btn logout-dialog__cancel" data-close-logout-dialog>Seguir aquí</button>
+                <form method="post" action="{% url 'logout' %}" class="m-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn logout-dialog__submit">Sí, cerrar sesión</button>
+                </form>
+            </div>
+        </div>
     </div>
+    {% endif %}
+    </div>
+    <script>
+        (() => {
+            const dialog = document.getElementById("logoutDialog");
+            if (!dialog) {
+                return;
+            }
+
+            const openButtons = document.querySelectorAll(".js-open-logout-dialog");
+            const closeButtons = dialog.querySelectorAll("[data-close-logout-dialog]");
+            const cancelButton = dialog.querySelector(".logout-dialog__cancel");
+            let lastTrigger = null;
+
+            const openDialog = (trigger) => {
+                lastTrigger = trigger;
+                dialog.classList.add("is-open");
+                dialog.setAttribute("aria-hidden", "false");
+                document.body.style.overflow = "hidden";
+                window.setTimeout(() => {
+                    cancelButton?.focus();
+                }, 40);
+            };
+
+            const closeDialog = () => {
+                dialog.classList.remove("is-open");
+                dialog.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+                lastTrigger?.focus();
+            };
+
+            openButtons.forEach((button) => {
+                button.addEventListener("click", () => openDialog(button));
+            });
+
+            closeButtons.forEach((button) => {
+                button.addEventListener("click", closeDialog);
+            });
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && dialog.classList.contains("is-open")) {
+                    closeDialog();
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
