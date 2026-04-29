@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ documento.titulo }}{% endblock %}
+
+{% block content %}
+<div class="page-header mb-3">
+    <h1 class="h3 mb-0">{{ documento.titulo }}</h1>
+    <div class="page-actions">
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'documentacion:lista' %}">Volver</a>
+        <a class="btn btn-primary btn-sm" href="{{ documento.archivo.url }}" target="_blank" rel="noopener">Abrir PDF</a>
+        {% if puede_gestionar %}
+            <a class="btn btn-outline-primary btn-sm" href="{% url 'documentacion:editar' documento.pk %}">Editar</a>
+            <form method="post" action="{% url 'documentacion:eliminar' documento.pk %}" onsubmit="return confirm('Se eliminará este documento. ¿Deseas continuar?');">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger btn-sm" type="submit">Eliminar</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="panel-card card h-100">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Datos del documento</h2>
+                <dl class="row mb-0 detail-grid">
+                    <dt class="col-sm-4">Tipo</dt>
+                    <dd class="col-sm-8">{{ documento.get_tipo_documento_display }}</dd>
+                    <dt class="col-sm-4">Formulación</dt>
+                    <dd class="col-sm-8">{{ documento.formulacion.nombre|default:"-" }}</dd>
+                    <dt class="col-sm-4">Materia prima</dt>
+                    <dd class="col-sm-8">
+                        {% if documento.materia_prima %}
+                            {{ documento.materia_prima.nombre }} - {{ documento.materia_prima.lote }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </dd>
+                    <dt class="col-sm-4">Subido por</dt>
+                    <dd class="col-sm-8">{{ documento.subido_por.get_full_name|default:documento.subido_por.username }}</dd>
+                    <dt class="col-sm-4">Fecha</dt>
+                    <dd class="col-sm-8">{{ documento.creado_en|date:"d/m/Y H:i" }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="panel-card card h-100">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Descripción</h2>
+                <p class="mb-0">{{ documento.descripcion|default:"Sin descripción registrada." }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card card mt-4">
+    <div class="card-body">
+        <h2 class="h5 mb-3">Documento PDF</h2>
+        <div class="alert alert-secondary mb-3">
+            Por compatibilidad, este documento se abre en una nueva pestaña para visualizarlo o descargarlo.
+        </div>
+    </div>
+</div>
+{% endblock %}

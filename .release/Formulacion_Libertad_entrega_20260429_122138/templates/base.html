@@ -1,0 +1,1028 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Formulación Magistral{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand: #0e3a5a;
+            --brand-dark: #082739;
+            --brand-soft: #164d76;
+            --accent: #d9b15f;
+            --accent-soft: #f2e4bf;
+            --surface: rgba(255, 255, 255, 0.9);
+            --line: #d7e3ec;
+            --text: #163042;
+        }
+        body {
+            font-family: "Manrope", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(217, 177, 95, 0.18), transparent 24%),
+                linear-gradient(180deg, #edf3f8 0%, #f7fafc 45%, #eef4f8 100%);
+        }
+        h1, h2, h3, h4, h5, h6,
+        .section-title,
+        .brand-title {
+            font-family: "Playfair Display", serif;
+            font-weight: 700;
+        }
+        .navbar {
+            background: linear-gradient(90deg, rgba(8, 39, 57, 0.98), rgba(14, 58, 90, 0.96));
+            box-shadow: 0 12px 30px rgba(8, 39, 57, 0.22);
+            backdrop-filter: blur(10px);
+        }
+        .topbar {
+            background: linear-gradient(90deg, var(--brand-dark), #0a3149);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .brand-lockup {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+        .navbar .container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.4rem;
+            row-gap: 0.85rem;
+        }
+        .navbar-brand {
+            flex: 0 0 auto;
+        }
+        .brand-logo-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 92px;
+            min-height: 54px;
+            padding: 0.45rem 0.7rem;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(233, 241, 247, 0.92));
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 10px 26px rgba(3, 19, 31, 0.16);
+        }
+        .brand-logo {
+            height: 42px;
+            width: auto;
+            display: block;
+        }
+        .brand-fallback {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(160deg, rgba(217, 177, 95, 0.28), rgba(217, 177, 95, 0.06));
+            color: #fff;
+            font-weight: 800;
+        }
+        .brand-text {
+            line-height: 1.05;
+        }
+        .brand-kicker {
+            display: block;
+            font-size: 0.68rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.72);
+        }
+        .brand-title {
+            display: block;
+            font-size: 1.12rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #fff;
+        }
+        .main-nav {
+            display: flex;
+            align-items: center;
+            flex: 1 1 720px;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            padding: 0.35rem;
+            border-radius: 1.4rem;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .site-shell {
+            position: relative;
+        }
+        .site-shell::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(120deg, rgba(14, 58, 90, 0.03), transparent 30%),
+                radial-gradient(circle at right top, rgba(217, 177, 95, 0.1), transparent 18%);
+        }
+        .hero-card,
+        .panel-card {
+            border: 1px solid rgba(215, 227, 236, 0.9);
+            border-radius: 1.2rem;
+            background: var(--surface);
+            box-shadow: 0 18px 45px rgba(11, 45, 67, 0.08);
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .page-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 0 0 1rem 1rem;
+        }
+        .table-mobile-wide {
+            min-width: 720px;
+        }
+        .mobile-record-card {
+            border: 1px solid rgba(14, 58, 90, 0.1);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 10px 24px rgba(11, 45, 67, 0.06);
+        }
+        .mobile-record-title {
+            color: var(--brand-dark);
+            font-weight: 800;
+        }
+        .mobile-record-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+        .mobile-record-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #627786;
+            margin-bottom: 0.2rem;
+        }
+        .mobile-record-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+        .detail-grid dt {
+            color: #5c7383;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.78rem;
+        }
+        .detail-grid dd {
+            margin-bottom: 0.9rem;
+        }
+        .form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--brand-dark);
+        }
+        .section-title {
+            color: var(--brand-dark);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .badge-soft {
+            background: linear-gradient(135deg, rgba(217, 177, 95, 0.2), rgba(217, 177, 95, 0.08));
+            color: var(--brand-dark);
+        }
+        .navbar .nav-link {
+            color: rgba(255, 255, 255, 0.78) !important;
+            font-weight: 600;
+            padding: 0.7rem 1rem !important;
+            border-radius: 999px;
+            transition: all 0.2s ease;
+        }
+        .navbar .nav-link:hover,
+        .navbar .nav-link:focus {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .navbar .nav-link.nav-current {
+            color: #fff !important;
+            background: linear-gradient(135deg, rgba(217, 177, 95, 0.95), rgba(188, 145, 55, 0.96));
+            box-shadow: 0 10px 22px rgba(7, 23, 34, 0.18);
+        }
+        .nav-pills {
+            gap: 0.75rem;
+        }
+        .nav-pills .nav-link {
+            color: var(--brand) !important;
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(14, 58, 90, 0.12);
+            border-radius: 999px;
+            padding: 0.8rem 1.15rem;
+            box-shadow: 0 10px 25px rgba(11, 45, 67, 0.06);
+        }
+        .nav-pills .nav-link:hover,
+        .nav-pills .nav-link:focus {
+            color: var(--brand-dark) !important;
+            background: rgba(255, 255, 255, 0.98);
+        }
+        .nav-pills .nav-link.active,
+        .nav-pills .show > .nav-link {
+            color: #fff !important;
+            background: linear-gradient(135deg, var(--brand), var(--brand-soft));
+            border-color: var(--brand);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--brand), var(--brand-soft));
+            border-color: var(--brand);
+        }
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+            border-color: var(--brand-dark);
+        }
+        .btn-outline-primary {
+            border-color: var(--brand);
+            color: var(--brand);
+        }
+        .btn-outline-primary:hover,
+        .btn-outline-primary:focus {
+            background: var(--brand);
+            border-color: var(--brand);
+        }
+        .btn-outline-danger,
+        .btn-outline-success,
+        .btn-outline-secondary {
+            border-width: 1.5px;
+        }
+        .table > :not(caption) > * > * {
+            border-bottom-color: var(--line);
+        }
+        .table thead th {
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #5c7383;
+        }
+        .form-control,
+        .form-select {
+            border-radius: 0.85rem;
+            border-color: #cfdbe5;
+            min-height: 46px;
+            box-shadow: none;
+        }
+        .form-control:focus,
+        .form-select:focus {
+            border-color: rgba(14, 58, 90, 0.45);
+            box-shadow: 0 0 0 0.25rem rgba(14, 58, 90, 0.12);
+        }
+        .alert {
+            border: 0;
+            border-radius: 1rem;
+        }
+        .user-panel {
+            display: flex;
+            align-items: center;
+            flex: 0 0 auto;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            padding: 0.5rem 0.7rem 0.5rem 1rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .user-meta {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .user-name {
+            color: #fff;
+            font-weight: 700;
+        }
+        .user-role {
+            align-self: flex-start;
+            padding: 0.26rem 0.62rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--brand-dark);
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        .logout-btn {
+            color: rgba(255, 255, 255, 0.92);
+            font-weight: 700;
+            position: relative;
+            padding: 0.4rem 0.85rem !important;
+            border-radius: 999px;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+        }
+        .logout-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 20px rgba(3, 19, 31, 0.22);
+            transform: translateY(-1px);
+        }
+        .logout-btn:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(217, 177, 95, 0.4);
+        }
+        .logout-btn::after {
+            content: "";
+            position: absolute;
+            inset: auto 0.85rem -0.15rem;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(217, 177, 95, 0), rgba(217, 177, 95, 0.95), rgba(217, 177, 95, 0));
+            transform: scaleX(0.35);
+            opacity: 0;
+            transition: transform 0.22s ease, opacity 0.22s ease;
+        }
+        .logout-btn:hover::after,
+        .logout-btn:focus-visible::after {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+        .topbar .container {
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .topbar .container span:last-child {
+            margin-left: auto;
+            text-align: right;
+        }
+        .site-footer {
+            margin-top: 2rem;
+            padding: 1.25rem 0 2rem;
+            border-top: 1px solid rgba(14, 58, 90, 0.12);
+            color: #4f6472;
+            font-size: 0.95rem;
+        }
+        .site-footer a {
+            color: var(--brand);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .site-footer a:hover,
+        .site-footer a:focus {
+            color: var(--brand-dark);
+            text-decoration: underline;
+        }
+        .logout-dialog {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem;
+            z-index: 1200;
+        }
+        .logout-dialog.is-open {
+            display: flex;
+        }
+        .logout-dialog__backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(7, 26, 39, 0.58);
+            backdrop-filter: blur(8px);
+            animation: logoutFadeIn 0.24s ease forwards;
+        }
+        .logout-dialog__card {
+            position: relative;
+            width: min(100%, 430px);
+            padding: 1.5rem;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at top right, rgba(217, 177, 95, 0.22), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 252, 0.96));
+            box-shadow: 0 28px 60px rgba(5, 26, 39, 0.3);
+            border: 1px solid rgba(14, 58, 90, 0.1);
+            animation: logoutCardIn 0.32s cubic-bezier(.2, .8, .2, 1) forwards;
+        }
+        .logout-dialog__badge {
+            width: 3.2rem;
+            height: 3.2rem;
+            border-radius: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: #fff;
+            background: linear-gradient(135deg, var(--brand-soft), var(--brand-dark));
+            box-shadow: 0 18px 30px rgba(8, 39, 57, 0.24);
+        }
+        .logout-dialog__title {
+            margin-bottom: 0.55rem;
+            color: var(--brand-dark);
+            font-size: 1.6rem;
+        }
+        .logout-dialog__text {
+            margin-bottom: 1.15rem;
+            color: #4b6271;
+            line-height: 1.65;
+        }
+        .logout-dialog__actions {
+            display: flex;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .logout-dialog__cancel,
+        .logout-dialog__submit {
+            min-width: 158px;
+            border-radius: 999px;
+            font-weight: 800;
+            padding: 0.82rem 1.15rem;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+        .logout-dialog__cancel:hover,
+        .logout-dialog__submit:hover {
+            transform: translateY(-1px);
+        }
+        .logout-dialog__cancel {
+            border: 1px solid rgba(14, 58, 90, 0.12);
+            color: var(--brand);
+            background: rgba(255, 255, 255, 0.92);
+        }
+        .logout-dialog__cancel:hover {
+            box-shadow: 0 12px 24px rgba(12, 40, 59, 0.12);
+        }
+        .logout-dialog__submit {
+            border: none;
+            color: #fff;
+            background: linear-gradient(135deg, var(--brand-soft), var(--brand-dark));
+            box-shadow: 0 16px 28px rgba(8, 39, 57, 0.24);
+        }
+        .logout-dialog__submit:hover {
+            box-shadow: 0 20px 32px rgba(8, 39, 57, 0.32);
+        }
+        @keyframes logoutFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes logoutCardIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.94);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .mobile-app-nav {
+            display: none;
+        }
+        .mobile-user-chip {
+            display: none;
+        }
+        @media (max-width: 1399.98px) {
+            .main-nav {
+                flex: 1 1 100%;
+                order: 3;
+                justify-content: center;
+            }
+            .user-panel {
+                order: 2;
+                margin-left: auto;
+            }
+        }
+        @media (max-width: 991.98px) {
+            .navbar .container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .main-nav {
+                flex-wrap: wrap;
+                border-radius: 1rem;
+            }
+            .user-panel {
+                border-radius: 1rem;
+                justify-content: space-between;
+            }
+            .page-actions {
+                width: 100%;
+            }
+            .page-actions .btn,
+            .page-actions a.btn {
+                flex: 1 1 calc(50% - 0.75rem);
+            }
+            .metric-value {
+                font-size: 2.1rem;
+            }
+            .logout-dialog__actions {
+                flex-direction: column;
+            }
+            .logout-dialog__cancel,
+            .logout-dialog__submit {
+                width: 100%;
+            }
+        }
+        @media (max-width: 767.98px) {
+            body {
+                background:
+                    radial-gradient(circle at top left, rgba(217, 177, 95, 0.2), transparent 26%),
+                    linear-gradient(180deg, #eef4f8 0%, #f8fbfd 38%, #edf3f8 100%);
+                padding-top: 4.75rem;
+            }
+            .site-shell::before {
+                background:
+                    linear-gradient(140deg, rgba(14, 58, 90, 0.04), transparent 32%),
+                    radial-gradient(circle at right top, rgba(217, 177, 95, 0.14), transparent 22%);
+            }
+            .topbar {
+                display: none;
+            }
+            .navbar {
+                display: none;
+            }
+            .hero-card .card-body,
+            .panel-card .card-body {
+                padding: 1.15rem !important;
+            }
+            .hero-card,
+            .panel-card {
+                border-radius: 1.1rem;
+                background: rgba(255, 255, 255, 0.94);
+                box-shadow: 0 14px 34px rgba(11, 45, 67, 0.1);
+            }
+            .page-header {
+                gap: 0.75rem;
+            }
+            .page-header h1,
+            .page-header .h3 {
+                font-size: 1.45rem;
+            }
+            .page-header p {
+                font-size: 0.95rem;
+            }
+            .page-actions .btn,
+            .page-actions a.btn {
+                flex: 1 1 100%;
+                min-height: 48px;
+                border-radius: 0.95rem;
+                font-weight: 700;
+            }
+            .site-footer {
+                font-size: 0.88rem;
+                padding: 1rem 0 1.5rem;
+            }
+            main.container {
+                padding-bottom: 1rem !important;
+            }
+            body {
+                padding-bottom: 5.8rem;
+            }
+            .mobile-user-chip {
+                display: block;
+                position: fixed;
+                top: 0.75rem;
+                left: 0.8rem;
+                right: 0.8rem;
+                z-index: 1040;
+            }
+            .mobile-user-chip__inner {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.72rem 0.95rem;
+                border-radius: 1.1rem;
+                background: rgba(8, 39, 57, 0.95);
+                color: #fff;
+                box-shadow: 0 16px 34px rgba(8, 39, 57, 0.22);
+                backdrop-filter: blur(14px);
+            }
+            .mobile-user-chip__logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 52px;
+                min-height: 40px;
+                padding: 0.3rem 0.5rem;
+                border-radius: 0.9rem;
+                background: rgba(255, 255, 255, 0.96);
+            }
+            .mobile-user-chip__logo img {
+                height: 24px;
+                width: auto;
+                display: block;
+            }
+            .mobile-user-chip__meta {
+                min-width: 0;
+                flex: 1 1 auto;
+            }
+            .mobile-user-chip__name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-weight: 700;
+                font-size: 0.95rem;
+                line-height: 1.15;
+            }
+            .mobile-user-chip__role {
+                display: inline-flex;
+                margin-top: 0.25rem;
+                padding: 0.18rem 0.55rem;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.12);
+                color: rgba(255, 255, 255, 0.88);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+            }
+            .table-responsive {
+                margin-inline: -0.1rem;
+            }
+            .mobile-record-grid {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+            .mobile-record-card {
+                border-radius: 1.15rem;
+                padding: 1rem !important;
+                background:
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 253, 0.95));
+                box-shadow: 0 12px 28px rgba(11, 45, 67, 0.08);
+            }
+            .mobile-record-title {
+                font-size: 1.03rem;
+                letter-spacing: -0.02em;
+            }
+            .mobile-record-label {
+                font-size: 0.68rem;
+                letter-spacing: 0.1em;
+                color: #6e8391;
+            }
+            .mobile-record-actions .btn,
+            .mobile-record-actions a {
+                flex: 1 1 100%;
+                text-align: center;
+                min-height: 46px;
+                border-radius: 0.9rem;
+                font-weight: 700;
+            }
+            .detail-grid dt,
+            .detail-grid dd {
+                width: 100%;
+                max-width: 100%;
+                flex: 0 0 100%;
+            }
+            .detail-grid dd {
+                margin-bottom: 1rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px dashed rgba(14, 58, 90, 0.1);
+            }
+            .detail-grid dd:last-child {
+                border-bottom: 0;
+                padding-bottom: 0;
+            }
+            .form-actions .btn,
+            .form-actions a,
+            .form-actions form {
+                flex: 1 1 100%;
+            }
+            .form-actions form .btn {
+                width: 100%;
+            }
+            .form-control,
+            .form-select,
+            .input-group-text {
+                min-height: 50px;
+                border-radius: 0.95rem;
+            }
+            .alert {
+                border-radius: 1rem;
+                box-shadow: 0 10px 24px rgba(11, 45, 67, 0.06);
+            }
+            .mobile-app-nav {
+                display: block;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1040;
+                padding: 0.65rem 0.8rem calc(0.65rem + env(safe-area-inset-bottom));
+                pointer-events: none;
+            }
+            .mobile-app-nav__inner {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.55rem;
+                padding: 0.6rem;
+                border-radius: 1.35rem;
+                background: rgba(8, 39, 57, 0.96);
+                box-shadow: 0 18px 38px rgba(8, 39, 57, 0.28);
+                backdrop-filter: blur(14px);
+                pointer-events: auto;
+            }
+            .mobile-app-nav__link {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.38rem;
+                min-height: 56px;
+                padding: 0.55rem 0.25rem;
+                border-radius: 1rem;
+                color: rgba(255, 255, 255, 0.74);
+                text-decoration: none;
+                font-size: 0.68rem;
+                font-weight: 700;
+                letter-spacing: 0.03em;
+                transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            }
+            .mobile-app-nav__link svg {
+                width: 19px;
+                height: 19px;
+                display: block;
+            }
+            .mobile-app-nav__link.is-active {
+                color: #fff;
+                background: linear-gradient(135deg, rgba(217, 177, 95, 0.95), rgba(188, 145, 55, 0.96));
+                box-shadow: 0 10px 18px rgba(4, 18, 28, 0.22);
+                transform: translateY(-1px);
+            }
+            .mobile-app-nav__link:active {
+                transform: scale(0.98);
+            }
+            .mobile-app-nav__button {
+                border: 0;
+                background: transparent;
+                width: 100%;
+                cursor: pointer;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="site-shell">
+    <div class="topbar py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span>Instituto Superior Tecnológico Universitario Libertad</span>
+            <span>Tecnología Superior en Asistencia en Farmacia</span>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center me-4" href="{% url 'dashboard:inicio' %}">
+                <span class="brand-lockup">
+                    <span class="brand-logo-wrap">
+                        <img
+                            src="{% static 'img/logo-istul.png' %}?v=20260407a"
+                            alt="Instituto Libertad"
+                            class="brand-logo"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        >
+                        <span class="brand-fallback">UL</span>
+                    </span>
+                </span>
+            </a>
+            {% if request.user.is_authenticated %}
+                <div class="main-nav">
+                    <a class="nav-link {% if '/materias-primas/' in request.path %}nav-current{% endif %}" href="{% url 'inventario:lista' %}">Materias primas</a>
+                    <a class="nav-link {% if '/formulaciones/' in request.path %}nav-current{% endif %}" href="{% url 'formulaciones:lista' %}">Formulaciones</a>
+                    <a class="nav-link {% if '/documentacion/' in request.path %}nav-current{% endif %}" href="{% url 'documentacion:lista' %}">Documentación</a>
+                    <a class="nav-link {% if '/noticias/' in request.path %}nav-current{% endif %}" href="{% url 'noticias:lista' %}">Noticias</a>
+                    <a class="nav-link {% if '/calculadora/' in request.path %}nav-current{% endif %}" href="{% url 'calculadora:inicio' %}">Calculadora</a>
+                    {% if request.user.rol != "ESTUDIANTE" %}
+                        <a class="nav-link {% if '/alertas/' in request.path %}nav-current{% endif %}" href="{% url 'alertas:lista' %}">Alertas</a>
+                    {% endif %}
+                    {% if request.user.rol == "ADMINISTRADOR" %}
+                        <a class="nav-link {% if request.resolver_match.namespace == 'usuarios' and request.resolver_match.url_name != 'historial' %}nav-current{% endif %}" href="{% url 'usuarios:lista' %}">Usuarios</a>
+                        <a class="nav-link {% if request.resolver_match.namespace == 'usuarios' and request.resolver_match.url_name == 'historial' %}nav-current{% endif %}" href="{% url 'usuarios:historial' %}">Historial</a>
+                    {% endif %}
+                </div>
+                <div class="ms-auto user-panel">
+                    <span class="user-role">{{ request.user.get_rol_display }}</span>
+                    <span class="user-meta">
+                        <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    </span>
+                    <button type="button" class="btn btn-link logout-btn text-decoration-none align-baseline js-open-logout-dialog">Salir</button>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+    <main class="container pb-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+        <div class="container text-center">
+            Desarrollado por Michael Buitrón
+            <br>
+            📧 <a href="mailto:michusty07@gmail.com">michusty07@gmail.com</a>
+        </div>
+    </footer>
+    {% if request.user.is_authenticated %}
+    <div class="mobile-user-chip d-md-none" aria-label="Usuario actual">
+        <div class="mobile-user-chip__inner">
+            <div class="mobile-user-chip__logo">
+                <img src="{% static 'img/logo-istul.png' %}?v=20260407a" alt="ISTUL">
+            </div>
+            <div class="mobile-user-chip__meta">
+                <div class="mobile-user-chip__name">@{{ request.user.username }}</div>
+                <div class="mobile-user-chip__role">{{ request.user.get_rol_display }}</div>
+            </div>
+        </div>
+    </div>
+    <nav class="mobile-app-nav d-md-none" aria-label="Navegacion movil">
+        <div class="mobile-app-nav__inner">
+            <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'dashboard' %}is-active{% endif %}" href="{% url 'dashboard:inicio' %}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.75v-5.5h-4.5V21H5a1 1 0 0 1-1-1v-9.5Z" fill="currentColor"/>
+                </svg>
+                <span>Inicio</span>
+            </a>
+            <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'inventario' %}is-active{% endif %}" href="{% url 'inventario:lista' %}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7.5 12 4l8 3.5v9L12 20l-8-3.5v-9Z" fill="currentColor"/>
+                    <path d="M4 7.5 12 11l8-3.5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>
+                </svg>
+                <span>Insumos</span>
+            </a>
+            <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'formulaciones' %}is-active{% endif %}" href="{% url 'formulaciones:lista' %}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 4h8v4.2l3.8 6.39A3 3 0 0 1 16.21 19H7.79A3 3 0 0 1 5.2 14.59L9 8.2V4Z" fill="currentColor"/>
+                </svg>
+                <span>Formulas</span>
+            </a>
+            {% if request.user.rol == "ADMINISTRADOR" %}
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'alertas' %}is-active{% endif %}" href="{% url 'alertas:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 4 4 18h16L12 4Z" fill="currentColor"/>
+                        <path d="M12 9v4" stroke="rgba(255,255,255,0.5)" stroke-width="1.4" stroke-linecap="round"/>
+                        <circle cx="12" cy="15.8" r="0.9" fill="rgba(255,255,255,0.6)"/>
+                    </svg>
+                    <span>Alertas</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'usuarios' %}is-active{% endif %}" href="{% url 'usuarios:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.33 0-6 1.79-6 4v1h12v-1c0-2.21-2.67-4-6-4Z" fill="currentColor"/>
+                    </svg>
+                    <span>Usuarios</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'calculadora' %}is-active{% endif %}" href="{% url 'calculadora:inicio' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M8.5 7.5h7M8.5 11h2m3 0h2m-7 3h2m3 0h2" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Calcular</span>
+                </a>
+            {% elif request.user.rol == "ESTUDIANTE" %}
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'documentacion' %}is-active{% endif %}" href="{% url 'documentacion:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M14 3v5h5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Docs</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'noticias' %}is-active{% endif %}" href="{% url 'noticias:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5 6h14v12H5z" fill="currentColor"/>
+                        <path d="M8 10h8M8 13h8M8 16h5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Noticias</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'calculadora' %}is-active{% endif %}" href="{% url 'calculadora:inicio' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M8.5 7.5h7M8.5 11h2m3 0h2m-7 3h2m3 0h2" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Calcular</span>
+                </a>
+            {% else %}
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'alertas' %}is-active{% endif %}" href="{% url 'alertas:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 4 4 18h16L12 4Z" fill="currentColor"/>
+                        <path d="M12 9v4" stroke="rgba(255,255,255,0.5)" stroke-width="1.4" stroke-linecap="round"/>
+                        <circle cx="12" cy="15.8" r="0.9" fill="rgba(255,255,255,0.6)"/>
+                    </svg>
+                    <span>Alertas</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'documentacion' %}is-active{% endif %}" href="{% url 'documentacion:lista' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M14 3v5h5" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Docs</span>
+                </a>
+                <a class="mobile-app-nav__link {% if request.resolver_match.namespace == 'calculadora' %}is-active{% endif %}" href="{% url 'calculadora:inicio' %}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="currentColor"/>
+                        <path d="M8.5 7.5h7M8.5 11h2m3 0h2m-7 3h2m3 0h2" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Calcular</span>
+                </a>
+            {% endif %}
+            <button class="mobile-app-nav__link mobile-app-nav__button js-open-logout-dialog" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M10 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M13 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    <span>Salir</span>
+                </button>
+        </div>
+    </nav>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <div class="logout-dialog" id="logoutDialog" aria-hidden="true">
+        <div class="logout-dialog__backdrop" data-close-logout-dialog></div>
+        <div class="logout-dialog__card" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle">
+            <div class="logout-dialog__badge" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M10 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M13 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 class="logout-dialog__title" id="logoutDialogTitle">¿Seguro que quieres cerrar sesión?</h2>
+            <p class="logout-dialog__text">
+                Vas a salir de tu cuenta actual. Si todavía estás trabajando en algo, asegúrate de haber guardado tus cambios.
+            </p>
+            <div class="logout-dialog__actions">
+                <button type="button" class="btn logout-dialog__cancel" data-close-logout-dialog>Seguir aquí</button>
+                <form method="post" action="{% url 'logout' %}" class="m-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn logout-dialog__submit">Sí, cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    </div>
+    <script>
+        (() => {
+            const dialog = document.getElementById("logoutDialog");
+            if (!dialog) {
+                return;
+            }
+
+            const openButtons = document.querySelectorAll(".js-open-logout-dialog");
+            const closeButtons = dialog.querySelectorAll("[data-close-logout-dialog]");
+            const cancelButton = dialog.querySelector(".logout-dialog__cancel");
+            let lastTrigger = null;
+
+            const openDialog = (trigger) => {
+                lastTrigger = trigger;
+                dialog.classList.add("is-open");
+                dialog.setAttribute("aria-hidden", "false");
+                document.body.style.overflow = "hidden";
+                window.setTimeout(() => {
+                    cancelButton?.focus();
+                }, 40);
+            };
+
+            const closeDialog = () => {
+                dialog.classList.remove("is-open");
+                dialog.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+                lastTrigger?.focus();
+            };
+
+            openButtons.forEach((button) => {
+                button.addEventListener("click", () => openDialog(button));
+            });
+
+            closeButtons.forEach((button) => {
+                button.addEventListener("click", closeDialog);
+            });
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && dialog.classList.contains("is-open")) {
+                    closeDialog();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

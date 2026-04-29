@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Subir documento técnico{% endblock %}
+
+{% block content %}
+<div class="page-header mb-3">
+    <h1 class="h3 mb-0">Subir documento técnico</h1>
+    <a href="{% url 'documentacion:lista' %}">Volver al listado</a>
+</div>
+
+<div class="panel-card card">
+    <div class="card-body p-4 p-lg-5">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-3">
+                {% for field in form %}
+                    <div class="col-md-6 {% if field.name == 'descripcion' or field.name == 'archivo' %}col-12{% endif %}">
+                        <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="alert alert-light border mt-4 mb-0">
+                <strong>Regla de uso:</strong> la ficha técnica y el procedimiento normalizado pueden asociarse a una formulación o a una materia prima, pero solo a una de las dos por documento.
+            </div>
+            <div class="form-actions mt-4">
+                <button class="btn btn-primary px-4" type="submit">Guardar documento</button>
+                <a class="btn btn-outline-secondary" href="{% url 'documentacion:lista' %}">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16
+    container_name: formulacion_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-formulacion_magistral_db}
+      POSTGRES_USER: ${DB_USER:-formulacion_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-formulacion_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-formulacion_user} -d ${DB_NAME:-formulacion_magistral_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: formulacion_web
+    restart: unless-stopped
+    env_file:
+      - deploy/docker.env
+    ports:
+      - "8091:8091"
+    volumes:
+      - static_data:/app/staticfiles
+      - media_data:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:

@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load querystring_tags %}
+
+{% block title %}Documentación técnica{% endblock %}
+
+{% block content %}
+<div class="page-header mb-3">
+    <div>
+        <h1 class="h3 mb-1">Documentación técnica</h1>
+        <p class="text-secondary mb-0">Consulta fichas técnicas y procedimientos normalizados disponibles para el laboratorio.</p>
+    </div>
+    {% if puede_subir %}
+        <a class="btn btn-primary" href="{% url 'documentacion:crear' %}">Subir documento</a>
+    {% endif %}
+</div>
+
+<form class="panel-card card card-body mb-3" method="get">
+    <div class="row g-2">
+        <div class="col-md-5">
+            <input class="form-control" type="search" name="q" value="{{ request.GET.q }}" placeholder="Buscar por título, descripción, formulación o materia prima">
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="tipo">
+                <option value="">Todos los tipos</option>
+                {% for value, label in tipos_documento %}
+                    <option value="{{ value }}" {% if request.GET.tipo == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="formulacion">
+                <option value="">Todas las formulaciones</option>
+                {% for formulacion in formulaciones %}
+                    <option value="{{ formulacion.pk }}" {% if request.GET.formulacion == formulacion.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ formulacion.codigo }} - {{ formulacion.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="materia_prima">
+                <option value="">Todas las materias primas</option>
+                {% for materia_prima in materias_primas %}
+                    <option value="{{ materia_prima.pk }}" {% if request.GET.materia_prima == materia_prima.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ materia_prima.nombre }} - {{ materia_prima.lote }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-1 d-grid">
+            <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+        </div>
+    </div>
+</form>
+
+<div class="panel-card card mb-4">
+    <div class="card-body pb-0">
+        <h2 class="h5 mb-3">Ficha técnica</h2>
+    </div>
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-hover mb-0 table-mobile-wide">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Relacionado con</th>
+                    <th>Subido por</th>
+                    <th>Fecha</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for documento in documentos_ficha_tecnica %}
+                    <tr>
+                        <td>{{ documento.titulo }}</td>
+                        <td>
+                            {% if documento.formulacion %}
+                                Formulación: {{ documento.formulacion.nombre }}
+                            {% elif documento.materia_prima %}
+                                Materia prima: {{ documento.materia_prima.nombre }} - {{ documento.materia_prima.lote }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ documento.subido_por.get_full_name|default:documento.subido_por.username }}</td>
+                        <td>{{ documento.creado_en|date:"d/m/Y H:i" }}</td>
+                        <td class="text-nowrap">
+                            <a href="{% url 'documentacion:detalle' documento.pk %}">Ver</a>
+                            | <a href="{{ documento.archivo.url }}" target="_blank" rel="noopener">Descargar PDF</a>
+                            {% if request.user.rol == "ADMINISTRADOR" or documento.subido_por_id == request.user.id %}
+                                | <a href="{% url 'documentacion:editar' documento.pk %}">Editar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">No hay fichas técnicas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-body d-md-none p-3">
+        {% for documento in documentos_ficha_tecnica %}
+            <div class="mobile-record-card p-3 {% if not forloop.last %}mb-3{% endif %}">
+                <div class="mobile-record-title mb-2">{{ documento.titulo }}</div>
+                <div class="mobile-record-grid mb-3">
+                    <div>
+                        <span class="mobile-record-label">Relacionado con</span>
+                        <div>
+                            {% if documento.formulacion %}
+                                Formulación: {{ documento.formulacion.nombre }}
+                            {% elif documento.materia_prima %}
+                                Materia prima: {{ documento.materia_prima.nombre }} - {{ documento.materia_prima.lote }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Subido por</span>
+                        <div>{{ documento.subido_por.get_full_name|default:documento.subido_por.username }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Fecha</span>
+                        <div>{{ documento.creado_en|date:"d/m/Y H:i" }}</div>
+                    </div>
+                </div>
+                <div class="mobile-record-actions">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'documentacion:detalle' documento.pk %}">Ver</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ documento.archivo.url }}" target="_blank" rel="noopener">Descargar PDF</a>
+                    {% if request.user.rol == "ADMINISTRADOR" or documento.subido_por_id == request.user.id %}
+                        <a class="btn btn-outline-dark btn-sm" href="{% url 'documentacion:editar' documento.pk %}">Editar</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="mb-0">No hay fichas técnicas registradas.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="panel-card card">
+    <div class="card-body pb-0">
+        <h2 class="h5 mb-3">Procedimiento normalizado / procedimiento operativo estándar</h2>
+    </div>
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-hover mb-0 table-mobile-wide">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Relacionado con</th>
+                    <th>Subido por</th>
+                    <th>Fecha</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for documento in documentos_procedimiento %}
+                    <tr>
+                        <td>{{ documento.titulo }}</td>
+                        <td>
+                            {% if documento.formulacion %}
+                                Formulación: {{ documento.formulacion.nombre }}
+                            {% elif documento.materia_prima %}
+                                Materia prima: {{ documento.materia_prima.nombre }} - {{ documento.materia_prima.lote }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ documento.subido_por.get_full_name|default:documento.subido_por.username }}</td>
+                        <td>{{ documento.creado_en|date:"d/m/Y H:i" }}</td>
+                        <td class="text-nowrap">
+                            <a href="{% url 'documentacion:detalle' documento.pk %}">Ver</a>
+                            | <a href="{{ documento.archivo.url }}" target="_blank" rel="noopener">Descargar PDF</a>
+                            {% if request.user.rol == "ADMINISTRADOR" or documento.subido_por_id == request.user.id %}
+                                | <a href="{% url 'documentacion:editar' documento.pk %}">Editar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">No hay procedimientos normalizados registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-body d-md-none p-3">
+        {% for documento in documentos_procedimiento %}
+            <div class="mobile-record-card p-3 {% if not forloop.last %}mb-3{% endif %}">
+                <div class="mobile-record-title mb-2">{{ documento.titulo }}</div>
+                <div class="mobile-record-grid mb-3">
+                    <div>
+                        <span class="mobile-record-label">Relacionado con</span>
+                        <div>
+                            {% if documento.formulacion %}
+                                Formulación: {{ documento.formulacion.nombre }}
+                            {% elif documento.materia_prima %}
+                                Materia prima: {{ documento.materia_prima.nombre }} - {{ documento.materia_prima.lote }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Subido por</span>
+                        <div>{{ documento.subido_por.get_full_name|default:documento.subido_por.username }}</div>
+                    </div>
+                    <div>
+                        <span class="mobile-record-label">Fecha</span>
+                        <div>{{ documento.creado_en|date:"d/m/Y H:i" }}</div>
+                    </div>
+                </div>
+                <div class="mobile-record-actions">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'documentacion:detalle' documento.pk %}">Ver</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ documento.archivo.url }}" target="_blank" rel="noopener">Descargar PDF</a>
+                    {% if request.user.rol == "ADMINISTRADOR" or documento.subido_por_id == request.user.id %}
+                        <a class="btn btn-outline-dark btn-sm" href="{% url 'documentacion:editar' documento.pk %}">Editar</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="mb-0">No hay procedimientos normalizados registrados.</p>
+        {% endfor %}
+    </div>
+</div>
+{% include "includes/pagination.html" %}
+{% endblock %}
